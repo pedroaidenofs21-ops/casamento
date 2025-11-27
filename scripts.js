@@ -66,20 +66,53 @@ document.addEventListener('DOMContentLoaded', function() {
   initRSVPForm();
   initBackToTop();
   initSmoothScroll();
+  initHeaderScroll(); // ADICIONE ESTA LINHA PARA O MENU TRANSPARENTE
   
   console.log('Site do casamento carregado com sucesso!');
 });
+
+// FUNÇÃO: CONTROLE DO MENU TRANSPARENTE AO SCROLLAR
+function initHeaderScroll() {
+  const header = document.querySelector('.header');
+  const scrollThreshold = 100; // Quantidade de scroll para ativar a mudança
+
+  function updateHeader() {
+    if (window.pageYOffset > scrollThreshold) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  }
+
+  // Atualizar ao carregar e ao scrollar
+  window.addEventListener('scroll', updateHeader);
+  updateHeader(); // Chamar uma vez para verificar o estado inicial
+}
 
 // FUNÇÃO: NAVEGAÇÃO RESPONSIVA
 function initNavigation() {
   const navToggle = document.querySelector('.nav-toggle');
   const navMenu = document.querySelector('.nav-menu');
+  const header = document.querySelector('.header');
   
   if (navToggle && navMenu) {
     navToggle.addEventListener('click', function() {
       navMenu.classList.toggle('active');
       navToggle.classList.toggle('active');
       navToggle.setAttribute('aria-expanded', navToggle.classList.contains('active'));
+      
+      // Adicionar background quando menu mobile está aberto
+      if (navMenu.classList.contains('active')) {
+        header.style.backgroundColor = 'var(--menu-bg-scrolled)';
+        header.style.backdropFilter = 'blur(10px)';
+      } else {
+        // Restaurar estado baseado no scroll
+        if (window.pageYOffset > 100) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      }
     });
     
     // Fechar menu ao clicar em um link
@@ -89,6 +122,13 @@ function initNavigation() {
         navMenu.classList.remove('active');
         navToggle.classList.remove('active');
         navToggle.setAttribute('aria-expanded', 'false');
+        
+        // Restaurar estado do header baseado no scroll
+        if (window.pageYOffset > 100) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
       });
     });
   }
@@ -308,7 +348,7 @@ function initSmoothScroll() {
 function loadCriticalImages() {
   // INSTRUÇÃO: Adicione aqui as imagens que devem ser carregadas prioritariamente
   const criticalImages = [
-    'assets/Logo-Casamento.png',
+    'assets/Logo-Casamento.jpg',
     'assets/bg-casal.jpg'
   ];
   
