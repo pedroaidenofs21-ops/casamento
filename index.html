@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maria & João - Nosso Casamento</title>
+    
+    <!-- METADADOS PARA SEO E ACESSIBILIDADE -->
+    <meta name="description" content="Site oficial do casamento de Maria e João. 28 de novembro de 2026.">
+    <meta name="keywords" content="casamento, Maria, João, 28/11/2026">
+    <meta name="author" content="Maria & João">
+    
+    <!-- FAVICON - SUBSTITUIR PELA SUA LOGO -->
+    <!-- INSTRUÇÃO: Substitua favicon.ico pelo seu arquivo de logo -->
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    
+    <!-- FONTES DO GOOGLE FONTS -->
+    <!-- INSTRUÇÃO: Para trocar as fontes, substitua os links abaixo por outras do Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- CSS PRINCIPAL -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- NAVEGAÇÃO PRINCIPAL -->
+    <!-- INSTRUÇÃO: Para adicionar/remover itens do menu, edite a lista abaixo -->
+    <header class="header">
+        <nav class="nav" aria-label="Navegação principal">
+            <div class="nav-container">
+                <!-- LOGO - SUBSTITUIR PELO SEU ARQUIVO -->
+                <!-- INSTRUÇÃO: Altere o src para o caminho da sua logo -->
+                <a href="#inicio" class="nav-logo">
+                    <img src="assets/Logo-Casamento.jpg" alt="Maria & João - Logo do Casamento" width="120" height="60">
+                </a>
+                
+                <!-- MENU HAMBURGUER (MOBILE) -->
+                <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                
+                <!-- MENU PRINCIPAL -->
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#inicio" class="nav-link">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#nossa-historia" class="nav-link">Nossa História</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#regras-pedidos" class="nav-link">Regras & Pedidos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#local-detalhes" class="nav-link">Local & Detalhes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#confirmacao" class="nav-link">Confirmação</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#presentes" class="nav-link">Presentes</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- SEÇÃO HERO / INÍCIO -->
+        <!-- INSTRUÇÃO: Para trocar a imagem de fundo, substitua bg-casal.jpg no CSS -->
+        <section id="inicio" class="hero">
+            <div class="hero-content">
+                <!-- LOGO CENTRAL -->
+                <!-- INSTRUÇÃO: Altere o src para o caminho da sua logo -->
+                <img src="assets/Logo-Casamento.jpg" alt="Maria & João" class="hero-logo" width="200" height="100">
+                
+                <!-- NOMES DOS NOIVOS -->
+                <!-- INSTRUÇÃO: Edite os nomes abaixo -->
+                <h1 class="hero-title">Maria & João</h1>
+                <p class="hero-subtitle">Nos casamos!</p>
+                
+                <!-- CONTADOR REGRESSIVO -->
+                <div class="countdown-container">
+                    <div class="countdown">
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="days">00</span>
+                            <span class="countdown-label">Dias</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="hours">00</span>
+                            <span class="countdown-label">Horas</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="minutes">00</span>
+                            <span class="countdown-label">Minutos</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="seconds">00</span>
+                            <span class="countdown-label">Segundos</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- BOTÕES DE AÇÃO -->
+                <div class="hero-buttons">
+                    <a href="#confirmacao" class="btn btn-primary">Confirmar Presença</a>
+                    <a href="#presentes" class="btn btn-secondary">Lista de Presentes</a>
+                </div>
+            </div>
+            
+            <!-- INDICADOR VISUAL PARA ROLAR -->
+            <div class="scroll-indicator" aria-hidden="true">
+                <span></span>
+            </div>
+        </section>
+
+        <!-- SEÇÃO NOSSA HISTÓRIA -->
+        <section id="nossa-historia" class="section">
+            <div class="container">
+                <h2 class="section-title">Nossa História</h2>
+                
+                <!-- INSTRUÇÃO: Para editar o texto introdutório, modifique o parágrafo abaixo -->
+                <p class="section-intro">
+                    Conhecemos-nos em 2018 durante uma viagem de trabalho e desde então nossa história 
+                    tem sido repleta de aventuras, risadas e muito amor. Pedimos em casamento durante 
+                    um pôr do sol inesquecível na praia, e agora queremos compartilhar este momento 
+                    especial com todos vocês.
+                </p>
+                
+                <!-- CONTAINER PARA A HISTÓRIA EM GRID -->
+                <!-- INSTRUÇÃO: Para adicionar/remover itens da história, edite o array historyItems no JS -->
+                <div class="history-grid" id="history-container">
+                    <!-- Os itens da história serão inseridos aqui via JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO REGRAS E PEDIDOS -->
+        <section id="regras-pedidos" class="section section-alt">
+            <div class="container">
+                <h2 class="section-title">Regras & Pedidos</h2>
+                
+                <!-- INSTRUÇÃO: Para editar as regras, modifique a lista abaixo -->
+                <div class="rules-grid">
+                    <div class="rule-item">
+                        <div class="rule-icon">
+                            <!-- INSTRUÇÃO: Para substituir ícones, troque o SVG abaixo -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 5.5V7H9V5.5L3 7V9L9 10.5V12L3 13.5V15.5L9 14V19H11V14.5L13 14V19H15V14L21 15.5V13.5L15 12V10.5L21 9Z" />
+                            </svg>
+                        </div>
+                        <h3>Traje</h3>
+                        <p>Traje social: esporte fino ou cocktail. Cores suaves são bem-vindas!</p>
+                    </div>
+                    
+                    <div class="rule-item">
+                        <div class="rule-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12,2A3,3 0 0,1 15,5A3,3 0 0,1 12,8A3,3 0 0,1 9,5A3,3 0 0,1 12,2M12,9C13.63,9 15.12,9.35 16.5,10.05C17.84,10.76 18.5,11.61 18.5,12.61V18.38C18.5,19.5 17.64,20.44 15.33,21.19C14.28,21.53 13.17,21.75 12,21.75C10.83,21.75 9.72,21.53 8.67,21.19C6.36,20.44 5.5,19.5 5.5,18.38V12.61C5.5,11.61 6.16,10.76 7.5,10.05C8.88,9.35 10.38,9 12,9M12,11A2,2 0 0,0 10,13A2,2 0 0,0 12,15A2,2 0 0,0 14,13A2,2 0 0,0 12,11Z" />
+                            </svg>
+                        </div>
+                        <h3>Crianças</h3>
+                        <p>Nosso casamento será um evento apenas para adultos. Agradecemos a compreensão.</p>
+                    </div>
+                    
+                    <div class="rule-item">
+                        <div class="rule-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M4,5H20V7H4V5M4,9H20V11H4V9M4,13H20V15H4V13M4,17H14V19H4V17Z" />
+                            </svg>
+                        </div>
+                        <h3>Horário</h3>
+                        <p>Cerimônia começará pontualmente às 16h. Pedimos que cheguem com 30 minutos de antecedência.</p>
+                    </div>
+                    
+                    <div class="rule-item">
+                        <div class="rule-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
+                            </svg>
+                        </div>
+                        <h3>Fotografias</h3>
+                        <p>Contamos com um fotógrafo profissional. Pedimos que evitem usar flash durante a cerimônia.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO LOCAL E DETALHES -->
+        <section id="local-detalhes" class="section">
+            <div class="container">
+                <h2 class="section-title">Local & Detalhes</h2>
+                
+                <div class="location-content">
+                    <div class="location-info">
+                        <!-- INSTRUÇÃO: Para editar os detalhes do local, modifique o conteúdo abaixo -->
+                        <h3>Fazenda Esperança</h3>
+                        <p class="location-address">
+                            Estrada do Sol, 1234 - Jardim das Flores<br>
+                            São Paulo - SP, 01234-567
+                        </p>
+                        
+                        <div class="location-details">
+                            <div class="detail-item">
+                                <strong>Data:</strong> 28 de Novembro de 2026
+                            </div>
+                            <div class="detail-item">
+                                <strong>Horário:</strong> 16h00 (cerimônia)
+                            </div>
+                            <div class="detail-item">
+                                <strong>Recepção:</strong> 17h30
+                            </div>
+                        </div>
+                        
+                        <p class="location-instructions">
+                            A fazenda possui estacionamento gratuito. Recomendamos chegar com 30 minutos 
+                            de antecedência para aproveitar o coquetel de boas-vindas.
+                        </p>
+                        
+                        <a href="https://maps.google.com/?q=Fazenda+Esperanca+Sao+Paulo" 
+                           class="btn btn-secondary" 
+                           target="_blank" 
+                           rel="noopener">
+                            Abrir no Google Maps
+                        </a>
+                    </div>
+                    
+                    <div class="location-map">
+                        <!-- MAPA DO GOOGLE MAPS (IFRAME) -->
+                        <!-- INSTRUÇÃO: Para trocar o mapa, substitua o src do iframe abaixo pelo link do seu local -->
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.098239553579!2d-46.65424992468391!3d-23.565435478799977!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c8da0aa315%3A0xd59f9431f2c9776a!2sAv.%20Paulista%2C%20S%C3%A3o%20Paulo%20-%20SP!5e0!3m2!1spt-BR!2sbr!4v1693425678901!5m2!1spt-BR!2sbr" 
+                            width="100%" 
+                            height="300" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade"
+                            title="Localização do casamento - Fazenda Esperança">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO CONFIRMAÇÃO DE PRESENÇA (RSVP) -->
+        <section id="confirmacao" class="section section-alt">
+            <div class="container">
+                <h2 class="section-title">Confirmação de Presença</h2>
+                <p class="section-intro">
+                    Sua presença é muito importante para nós! Por favor, confirme até 30 de setembro de 2026.
+                </p>
+                
+                <!-- FORMULÁRIO DE RSVP -->
+                <!-- INSTRUÇÃO: Para alterar o endpoint do formulário, edite a constante RSVP_ENDPOINT no JS -->
+                <form id="rsvp-form" class="rsvp-form">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Nome completo *</label>
+                        <input type="text" id="name" name="name" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="form-label">E-mail *</label>
+                        <input type="email" id="email" name="email" class="form-input" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Telefone (opcional)</label>
+                        <input type="tel" id="phone" name="phone" class="form-input">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="guests" class="form-label">Número de convidados *</label>
+                        <select id="guests" name="guests" class="form-select" required>
+                            <option value="" disabled selected>Selecione</option>
+                            <option value="1">1 pessoa (apenas eu)</option>
+                            <option value="2">2 pessoas (eu + 1 acompanhante)</option>
+                            <option value="3">3 pessoas</option>
+                            <option value="4">4 pessoas</option>
+                            <option value="5">5 ou mais pessoas</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Confirmo minha presença:</label>
+                        <div class="form-options">
+                            <label class="form-option">
+                                <input type="radio" name="attendance" value="yes" required>
+                                <span class="form-option-text">Sim, estarei presente!</span>
+                            </label>
+                            <label class="form-option">
+                                <input type="radio" name="attendance" value="no">
+                                <span class="form-option-text">Infelizmente não poderei comparecer</span>
+                            </label>
+                            <label class="form-option">
+                                <input type="radio" name="attendance" value="unsure">
+                                <span class="form-option-text">Ainda não tenho certeza</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message" class="form-label">Mensagem (opcional)</label>
+                        <textarea id="message" name="message" class="form-textarea" rows="4" placeholder="Deixe uma mensagem especial para os noivos..."></textarea>
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button type="submit" class="btn btn-primary">Confirmar Presença</button>
+                        <button type="reset" class="btn btn-secondary">Limpar Formulário</button>
+                    </div>
+                </form>
+                
+                <!-- MENSAGEM DE CONFIRMAÇÃO (OCULTA INICIALMENTE) -->
+                <div id="form-message" class="form-message" aria-live="polite"></div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO LISTA DE PRESENTES -->
+        <section id="presentes" class="section">
+            <div class="container">
+                <h2 class="section-title">Lista de Presentes</h2>
+                
+                <div class="gifts-content">
+                    <!-- INSTRUÇÃO: Para editar o texto sobre presentes, modifique o parágrafo abaixo -->
+                    <p class="section-intro">
+                        Sua presença é o presente mais importante! Mas se desejar nos presentear, 
+                        criamos uma lista em algumas lojas para facilitar sua escolha.
+                    </p>
+                    
+                    <!-- BOTÃO PARA LISTA DE PRESENTES -->
+                    <!-- INSTRUÇÃO: Para trocar o link da lista de presentes, altere o href abaixo -->
+                    <a href="https://exemplo.com/nossa-lista" 
+                       class="btn btn-primary btn-large" 
+                       target="_blank" 
+                       rel="noopener">
+                        Ver Lista de Presentes
+                    </a>
+                    
+                    <!-- INSTRUÇÃO OPCIONAL: Se sua loja permitir embed, descomente o código abaixo -->
+                    <!--
+                    <div class="gift-embed">
+                        <h3>Nossas Escolhas</h3>
+                        <div class="embed-container">
+                            <!-- Código de embed da loja aqui -->
+                        </div>
+                    </div>
+                    -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- RODAPÉ -->
+    <footer class="footer">
+        <div class="container">
+            <!-- REDES SOCIAIS -->
+            <!-- INSTRUÇÃO: Para adicionar/remover redes sociais, edite a lista abaixo -->
+            <div class="social-links">
+                <a href="#" aria-label="Instagram" class="social-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z" />
+                    </svg>
+                </a>
+                <a href="#" aria-label="Facebook" class="social-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z" />
+                    </svg>
+                </a>
+                <a href="#" aria-label="WhatsApp" class="social-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 6.46 17.5 2 12.04 2ZM17.36 15.83C17.16 16.23 16.33 16.58 15.88 16.63C15.43 16.68 14.43 16.48 13.18 15.83C11.58 14.98 10.53 13.68 10.38 13.53C10.23 13.38 9.33 12.48 9.33 11.53C9.33 10.58 9.93 10.03 10.13 9.78C10.33 9.53 10.63 9.48 10.83 9.48C11.03 9.48 11.28 9.48 11.43 9.73C11.58 9.98 12.08 10.88 12.13 10.98C12.18 11.08 12.23 11.23 12.13 11.38C12.03 11.53 11.93 11.63 11.83 11.73C11.73 11.83 11.63 11.98 11.58 12.03C11.48 12.13 11.38 12.23 11.48 12.43C11.58 12.63 12.03 13.58 12.53 14.33C13.18 15.28 13.73 15.68 14.03 15.88C14.33 16.08 14.53 16.08 14.73 15.98C14.93 15.88 15.88 15.33 16.08 15.13C16.28 14.93 16.48 14.88 16.68 15.03C16.88 15.18 17.56 15.43 17.36 15.83Z" />
+                    </svg>
+                </a>
+            </div>
+            
+            <!-- DIREITOS AUTORAIS E CRÉDITOS -->
+            <!-- INSTRUÇÃO: Para editar os créditos, modifique o texto abaixo -->
+            <p class="footer-copyright">
+                &copy; 2026 Maria & João. Todos os direitos reservados.
+            </p>
+            
+            <!-- BOTÃO VOLTAR AO TOPO -->
+            <button class="back-to-top" aria-label="Voltar ao topo da página">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" />
+                </svg>
+            </button>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script src="scripts.js"></script>
+</body>
+</html>
