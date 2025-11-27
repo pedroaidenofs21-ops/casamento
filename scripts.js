@@ -308,7 +308,7 @@ function initSmoothScroll() {
 function loadCriticalImages() {
   // INSTRUÇÃO: Adicione aqui as imagens que devem ser carregadas prioritariamente
   const criticalImages = [
-    'assets/logo-casamento.png',
+    'assets/Logo-Casamento.jpg',
     'assets/bg-casal.jpg'
   ];
   
