@@ -309,7 +309,7 @@ function loadCriticalImages() {
   // INSTRUÇÃO: Adicione aqui as imagens que devem ser carregadas prioritariamente
   const criticalImages = [
     'assets/Logo-Casamento.jpg',
-    'assets/bg-casal.jpg'
+    'assets/bg-casal.png'
   ];
   
   criticalImages.forEach(src => {
