@@ -198,7 +198,7 @@ function initHistorySection() {
 }
 
 // CONFIRMAÇÃO DE PRESENÇA - SISTEMA CORRIGIDO
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzzC-lN3uZDce3Lr5c9N9wyU8NfrmYCMiN3lR4qMifF1WQ92FOyaOOFQnKxNw8yCaJ2/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxKs5bjwiDb9ExzXa6tfLxYFju4E9NH8j4weVj_t97ZU2DT0rc4lafEzyEc_lGHIu7h/exec';
 
 // Elementos da DOM
 const buscarNomeInput = document.getElementById('buscarNome');
@@ -213,9 +213,11 @@ const mensagemRetornoDiv = document.getElementById('mensagemRetorno');
 // Variáveis de controle
 let listaDeNomes = [];
 let timeoutBusca = null;
+let listaCarregada = false;
 
 // Carregar lista de nomes ao iniciar
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Iniciando carregamento da lista de convidados...');
     carregarListaDeNomes();
 });
 
@@ -230,9 +232,11 @@ buscarNomeInput.addEventListener('input', function() {
         return;
     }
     
-    // Mostrar loading na lista
-    resultadosBuscaDiv.innerHTML = '<div class="resultado-item loading">Buscando...</div>';
-    resultadosBuscaDiv.style.display = 'block';
+    if (!listaCarregada) {
+        resultadosBuscaDiv.innerHTML = '<div class="resultado-item loading">Carregando lista de convidados...</div>';
+        resultadosBuscaDiv.style.display = 'block';
+        return;
+    }
     
     timeoutBusca = setTimeout(() => {
         buscarNomes(termo);
@@ -246,18 +250,28 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Função para carregar lista de nomes (SEM MOSTRAR NÚMERO)
+// Função para carregar lista de nomes
 function carregarListaDeNomes() {
-    fetch(SCRIPT_URL + '?action=getNomes')
+    console.log('Fazendo requisição para: ' + SCRIPT_URL);
+    
+    fetch(SCRIPT_URL)
         .then(response => {
-            if (!response.ok) throw new Error('Erro na rede');
+            console.log('Resposta recebida:', response);
+            if (!response.ok) {
+                throw new Error('Erro na rede: ' + response.status);
+            }
             return response.json();
         })
         .then(nomes => {
+            console.log('Nomes recebidos:', nomes);
             listaDeNomes = nomes.filter(nome => nome && nome.trim() !== '');
+            listaCarregada = true;
+            console.log('Lista carregada com ' + listaDeNomes.length + ' nomes');
         })
         .catch(error => {
             console.error('Erro ao carregar nomes:', error);
+            // Tentar novamente após 3 segundos
+            setTimeout(carregarListaDeNomes, 3000);
         });
 }
 
@@ -268,6 +282,8 @@ function buscarNomes(termo) {
         nome.toLowerCase().includes(termoLower)
     );
 
+    console.log('Buscando por:', termo, 'Resultados:', resultados);
+    
     resultadosBuscaDiv.innerHTML = '';
     
     if (resultados.length === 0) {
@@ -299,6 +315,7 @@ function buscarNomes(termo) {
 
 // Abrir popup de confirmação
 function abrirPopupConfirmacao(nome) {
+    console.log('Abrindo popup para:', nome);
     nomeSelecionadoSpan.textContent = nome;
     popup.style.display = 'flex';
     document.body.style.overflow = 'hidden';
@@ -339,6 +356,8 @@ formConfirmacaoFinal.addEventListener('submit', function(e) {
     const documento = document.getElementById('documento').value.trim();
     const email = document.getElementById('emailConfirmacao').value.trim();
     
+    console.log('Enviando confirmação:', { nomeBuscado, nomeConfirmacao, documento, email });
+    
     // Validações
     if (nomeConfirmacao.toLowerCase() !== nomeBuscado.toLowerCase()) {
         exibirMensagem('O nome digitado não confere com o nome selecionado.', 'error');
@@ -374,10 +393,18 @@ formConfirmacaoFinal.addEventListener('submit', function(e) {
     
     fetch(SCRIPT_URL, {
         method: 'POST',
+        headers: {
+            'Content-Type': 'text/plain;charset=utf-8',
+        },
         body: JSON.stringify(dados)
     })
-    .then(response => response.text())
+    .then(response => {
+        console.log('Resposta do POST:', response);
+        return response.text();
+    })
     .then(resultado => {
+        console.log('Resultado da confirmação:', resultado);
+        
         if (resultado === 'Sucesso') {
             exibirMensagemConfirmacao('✅ Presença confirmada com sucesso! Obrigado por confirmar.', 'success');
             fecharPopup();
@@ -385,12 +412,14 @@ formConfirmacaoFinal.addEventListener('submit', function(e) {
             listaDeNomes = listaDeNomes.filter(nome => nome !== nomeBuscado);
         } else if (resultado === 'JaConfirmado') {
             exibirMensagem('❌ Este convidado já foi confirmado anteriormente.', 'error');
+        } else if (resultado === 'Nome não encontrado') {
+            exibirMensagem('❌ Nome não encontrado na lista de convidados.', 'error');
         } else {
             exibirMensagem('❌ Erro na confirmação. Tente novamente mais tarde.', 'error');
         }
     })
     .catch(error => {
-        console.error('Erro:', error);
+        console.error('Erro na requisição:', error);
         exibirMensagem('❌ Erro de conexão. Verifique sua internet e tente novamente.', 'error');
     })
     .finally(() => {
