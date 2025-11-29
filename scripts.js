@@ -199,7 +199,7 @@ function initHistorySection() {
 }
 
 // CONFIRMAÇÃO DE PRESENÇA - SISTEMA ATUALIZADO
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxdch4ukCi-8SF6iUmCyNHvXnFyfL_GO5AgKw1tZyb6nWNsNUonwvECTgAxSQ2KKyl7/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytMbBoSuVgeww4oJ37fbXMKvGATIC3-I0dIqs0nIoG14i6EBFa2thqRtD0O2Av7hus/exec';
 
 // Elementos da DOM
 const buscarNomeInput = document.getElementById('buscarNome');
