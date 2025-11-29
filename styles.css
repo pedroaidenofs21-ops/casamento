@@ -223,16 +223,41 @@ a {
   justify-content: space-between;
 }
 
-/* Logo no menu transparente */
-.nav-logo img {
-  height: 45px; /* Um pouco menor para mais delicadeza */
-  width: auto;
-  transition: var(--transition);
-  filter: brightness(0) invert(1); /* Logo branca no menu transparente */
+/* LOGO COM DUAS VERSÕES - BRANCA E VERDE */
+.nav-logo {
+  position: relative;
+  display: inline-block;
+  height: 45px;
 }
 
-.header.scrolled .nav-logo img {
-  filter: none; /* Logo colorida quando scrolado */
+.logo-img {
+  height: 45px;
+  width: auto;
+  transition: var(--transition);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Logo branco - visível quando menu é transparente */
+.logo-white {
+  opacity: 1;
+  filter: brightness(0) invert(1);
+}
+
+/* Logo verde - escondido quando menu é transparente */
+.logo-green {
+  opacity: 0;
+  filter: none;
+}
+
+/* Quando menu fica branco (scrolled), inverte as opacidades */
+.header.scrolled .logo-white {
+  opacity: 0;
+}
+
+.header.scrolled .logo-green {
+  opacity: 1;
 }
 
 /* MENU TRANSPARENTE - ESTILOS DELICADOS */
