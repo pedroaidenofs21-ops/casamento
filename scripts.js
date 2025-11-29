@@ -198,91 +198,258 @@ function initHistorySection() {
   historyContainer.innerHTML = historyHTML;
 }
 
-// FUNÇÃO: FORMULÁRIO RSVP
-function initRSVPForm() {
-  const rsvpForm = document.getElementById('rsvp-form');
-  const formMessage = document.getElementById('form-message');
-  
-  if (!rsvpForm) return;
-  
-  rsvpForm.addEventListener('submit', function(e) {
+// CONFIRMAÇÃO DE PRESENÇA - SISTEMA ATUALIZADO
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxdch4ukCi-8SF6iUmCyNHvXnFyfL_GO5AgKw1tZyb6nWNsNUonwvECTgAxSQ2KKyl7/exec';
+
+// Elementos da DOM
+const buscarNomeInput = document.getElementById('buscarNome');
+const resultadosBuscaDiv = document.getElementById('resultadosBusca');
+const popup = document.getElementById('popupConfirmacao');
+const nomeSelecionadoSpan = document.getElementById('nomeSelecionado');
+const formConfirmacaoFinal = document.getElementById('formConfirmacaoFinal');
+const btnCancelar = document.getElementById('btnCancelar');
+const popupClose = document.getElementById('popupClose');
+const mensagemRetornoDiv = document.getElementById('mensagemRetorno');
+const statusMessageDiv = document.getElementById('statusMessage');
+
+// Variáveis de controle
+let listaDeNomes = [];
+let timeoutBusca = null;
+
+// Carregar lista de nomes ao iniciar
+document.addEventListener('DOMContentLoaded', function() {
+    carregarListaDeNomes();
+});
+
+// Busca em tempo real com debounce
+buscarNomeInput.addEventListener('input', function() {
+    clearTimeout(timeoutBusca);
+    const termo = this.value.trim();
+    
+    if (termo.length < 2) {
+        resultadosBuscaDiv.style.display = 'none';
+        resultadosBuscaDiv.innerHTML = '';
+        return;
+    }
+    
+    timeoutBusca = setTimeout(() => {
+        buscarNomes(termo);
+    }, 300);
+});
+
+// Fechar resultados ao clicar fora
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.search-box')) {
+        resultadosBuscaDiv.style.display = 'none';
+    }
+});
+
+// Função para carregar lista de nomes
+function carregarListaDeNomes() {
+    mostrarStatus('Carregando lista de convidados...', 'loading');
+    
+    fetch(SCRIPT_URL + '?action=getNomes')
+        .then(response => {
+            if (!response.ok) throw new Error('Erro na rede');
+            return response.json();
+        })
+        .then(nomes => {
+            listaDeNomes = nomes.filter(nome => nome && nome.trim() !== '');
+            mostrarStatus(`${listaDeNomes.length} convidados encontrados`, 'success');
+            setTimeout(() => ocultarStatus(), 3000);
+        })
+        .catch(error => {
+            console.error('Erro ao carregar nomes:', error);
+            mostrarStatus('Erro ao carregar lista. Tente recarregar a página.', 'error');
+        });
+}
+
+// Função de busca
+function buscarNomes(termo) {
+    const termoLower = termo.toLowerCase();
+    const resultados = listaDeNomes.filter(nome => 
+        nome.toLowerCase().includes(termoLower)
+    );
+
+    resultadosBuscaDiv.innerHTML = '';
+    
+    if (resultados.length === 0) {
+        resultadosBuscaDiv.innerHTML = `
+            <div class="resultado-item no-results">
+                Nenhum convidado encontrado com "${termo}"
+            </div>
+        `;
+    } else {
+        resultados.forEach(nome => {
+            const div = document.createElement('div');
+            div.className = 'resultado-item';
+            div.innerHTML = `
+                <span class="result-name">${nome}</span>
+                <button class="btn-select" data-nome="${nome}">Sou eu</button>
+            `;
+            resultadosBuscaDiv.appendChild(div);
+            
+            // Adicionar evento ao botão
+            div.querySelector('.btn-select').addEventListener('click', function() {
+                const nomeConvidado = this.getAttribute('data-nome');
+                abrirPopupConfirmacao(nomeConvidado);
+            });
+        });
+    }
+    
+    resultadosBuscaDiv.style.display = 'block';
+}
+
+// Abrir popup de confirmação
+function abrirPopupConfirmacao(nome) {
+    nomeSelecionadoSpan.textContent = nome;
+    popup.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    
+    // Pré-preencher o campo de nome
+    document.getElementById('nomeConfirmacao').value = nome;
+    document.getElementById('nomeConfirmacao').focus();
+    
+    // Esconder resultados da busca
+    resultadosBuscaDiv.style.display = 'none';
+    buscarNomeInput.value = '';
+}
+
+// Fechar popup
+function fecharPopup() {
+    popup.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    limparFormulario();
+}
+
+// Event listeners para fechar popup
+btnCancelar.addEventListener('click', fecharPopup);
+popupClose.addEventListener('click', fecharPopup);
+
+// Fechar popup ao clicar fora do conteúdo
+popup.addEventListener('click', function(e) {
+    if (e.target === popup) {
+        fecharPopup();
+    }
+});
+
+// Processar confirmação final
+formConfirmacaoFinal.addEventListener('submit', function(e) {
     e.preventDefault();
     
-    // Coletar dados do formulário
-    const formData = new FormData(rsvpForm);
-    const data = {
-      name: formData.get('name'),
-      email: formData.get('email'),
-      phone: formData.get('phone') || '',
-      guests: formData.get('guests'),
-      attendance: formData.get('attendance'),
-      message: formData.get('message') || ''
+    const nomeBuscado = nomeSelecionadoSpan.textContent;
+    const nomeConfirmacao = document.getElementById('nomeConfirmacao').value.trim();
+    const documento = document.getElementById('documento').value.trim();
+    const email = document.getElementById('emailConfirmacao').value.trim();
+    
+    // Validações
+    if (nomeConfirmacao.toLowerCase() !== nomeBuscado.toLowerCase()) {
+        exibirMensagem('O nome digitado não confere com o nome selecionado.', 'error');
+        return;
+    }
+    
+    if (!validarDocumento(documento)) {
+        exibirMensagem('Por favor, digite um RG ou CPF válido.', 'error');
+        return;
+    }
+    
+    if (!validarEmail(email)) {
+        exibirMensagem('Por favor, digite um e-mail válido.', 'error');
+        return;
+    }
+    
+    // Mostrar loading
+    const btnSubmit = this.querySelector('.btn-primary');
+    const btnText = btnSubmit.querySelector('.btn-text');
+    const btnLoading = btnSubmit.querySelector('.btn-loading');
+    
+    btnText.style.display = 'none';
+    btnLoading.style.display = 'flex';
+    btnSubmit.disabled = true;
+    
+    // Enviar dados
+    const dados = {
+        nomeBuscado: nomeBuscado,
+        nomeConfirmacao: nomeConfirmacao,
+        documento: documento,
+        email: email
     };
     
-    // Validação básica
-    if (!data.name || !data.email || !data.guests || !data.attendance) {
-      showFormMessage('Por favor, preencha todos os campos obrigatórios.', 'error');
-      return;
-    }
-    
-    // Enviar dados (simulação - substituir por fetch real)
-    submitRSVP(data);
-  });
-  
-  // Função para enviar dados do RSVP
-  function submitRSVP(data) {
-    // SIMULAÇÃO DE ENVIO - INSTRUÇÃO: Substitua pelo código real de envio
-    
-    // Exemplo com fetch (descomente e configure o endpoint):
-    /*
-    fetch(RSVP_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data)
+    fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(dados)
     })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Erro na resposta do servidor');
-      }
-      return response.json();
-    })
-    .then(result => {
-      showFormMessage('Obrigado por confirmar sua presença! Entraremos em contato em breve.', 'success');
-      rsvpForm.reset();
+    .then(response => response.text())
+    .then(resultado => {
+        if (resultado === 'Sucesso') {
+            exibirMensagemConfirmacao('✅ Presença confirmada com sucesso! Obrigado por confirmar.', 'success');
+            fecharPopup();
+            // Remover nome da lista local
+            listaDeNomes = listaDeNomes.filter(nome => nome !== nomeBuscado);
+        } else {
+            exibirMensagem('❌ Erro na confirmação. Tente novamente mais tarde.', 'error');
+        }
     })
     .catch(error => {
-      console.error('Erro:', error);
-      showFormMessage('Desculpe, ocorreu um erro. Tente novamente mais tarde.', 'error');
+        console.error('Erro:', error);
+        exibirMensagem('❌ Erro de conexão. Verifique sua internet e tente novamente.', 'error');
+    })
+    .finally(() => {
+        // Restaurar botão
+        btnText.style.display = 'block';
+        btnLoading.style.display = 'none';
+        btnSubmit.disabled = false;
     });
-    */
+});
+
+// Funções auxiliares
+function mostrarStatus(mensagem, tipo) {
+    statusMessageDiv.textContent = mensagem;
+    statusMessageDiv.className = `status-message ${tipo}`;
+    statusMessageDiv.style.display = 'block';
+}
+
+function ocultarStatus() {
+    statusMessageDiv.style.display = 'none';
+}
+
+function exibirMensagem(mensagem, tipo) {
+    mensagemRetornoDiv.innerHTML = mensagem;
+    mensagemRetornoDiv.className = `confirmation-message ${tipo}`;
+    mensagemRetornoDiv.style.display = 'block';
     
-    // SIMULAÇÃO (REMOVER QUANDO IMPLEMENTAR O ENDPOINT REAL)
     setTimeout(() => {
-      showFormMessage('Obrigado por confirmar sua presença! Entraremos em contato em breve.', 'success');
-      rsvpForm.reset();
-    }, 1000);
-  }
-  
-  // Função para exibir mensagens do formulário
-  function showFormMessage(message, type) {
-    if (!formMessage) return;
-    
-    formMessage.textContent = message;
-    formMessage.className = `form-message ${type}`;
-    formMessage.style.display = 'block';
-    
-    // Rolagem suave para a mensagem
-    formMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    
-    // Ocultar mensagem após 5 segundos (apenas para sucesso)
-    if (type === 'success') {
-      setTimeout(() => {
-        formMessage.style.display = 'none';
-      }, 5000);
-    }
-  }
+        mensagemRetornoDiv.style.display = 'none';
+    }, 5000);
+}
+
+function exibirMensagemConfirmacao(mensagem, tipo) {
+    mensagemRetornoDiv.innerHTML = `
+        <div class="confirmation-success">
+            <div class="success-icon">🎉</div>
+            <div class="success-message">${mensagem}</div>
+            <div class="success-details">Enviaremos todas as informações para o e-mail cadastrado.</div>
+        </div>
+    `;
+    mensagemRetornoDiv.className = `confirmation-message ${tipo}`;
+    mensagemRetornoDiv.style.display = 'block';
+}
+
+function limparFormulario() {
+    formConfirmacaoFinal.reset();
+    resultadosBuscaDiv.innerHTML = '';
+    resultadosBuscaDiv.style.display = 'none';
+}
+
+function validarDocumento(documento) {
+    // Remover caracteres não numéricos
+    const docLimpo = documento.replace(/\D/g, '');
+    return docLimpo.length >= 8; // RG ou CPF mínimo
+}
+
+function validarEmail(email) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
 }
 
 // FUNÇÃO: BOTÃO "VOLTAR AO TOPO"
