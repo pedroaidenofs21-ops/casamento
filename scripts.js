@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initRSVPForm();
   initBackToTop();
   initSmoothScroll();
-  initHeaderScroll(); // ADICIONE ESTA LINHA PARA O MENU TRANSPARENTE
+  initHeaderScroll();
   
   console.log('Site do casamento carregado com sucesso!');
 });
@@ -89,47 +89,45 @@ function initHeaderScroll() {
   updateHeader(); // Chamar uma vez para verificar o estado inicial
 }
 
-// FUNÇÃO: NAVEGAÇÃO RESPONSIVA
+// FUNÇÃO: NAVEGAÇÃO RESPONSIVA MELHORADA
 function initNavigation() {
   const navToggle = document.querySelector('.nav-toggle');
   const navMenu = document.querySelector('.nav-menu');
   const header = document.querySelector('.header');
+  const body = document.body;
   
   if (navToggle && navMenu) {
     navToggle.addEventListener('click', function() {
       navMenu.classList.toggle('active');
       navToggle.classList.toggle('active');
+      body.classList.toggle('no-scroll'); // Impede scroll quando menu está aberto
       navToggle.setAttribute('aria-expanded', navToggle.classList.contains('active'));
-      
-      // Adicionar background quando menu mobile está aberto
-      if (navMenu.classList.contains('active')) {
-        header.style.backgroundColor = 'var(--menu-bg-scrolled)';
-        header.style.backdropFilter = 'blur(10px)';
-      } else {
-        // Restaurar estado baseado no scroll
-        if (window.pageYOffset > 100) {
-          header.classList.add('scrolled');
-        } else {
-          header.classList.remove('scrolled');
-        }
-      }
     });
     
-    // Fechar menu ao clicar em um link
+    // Fechar menu ao clicar em um link (mobile)
     const navLinks = document.querySelectorAll('.nav-link');
     navLinks.forEach(link => {
       link.addEventListener('click', () => {
-        navMenu.classList.remove('active');
-        navToggle.classList.remove('active');
-        navToggle.setAttribute('aria-expanded', 'false');
-        
-        // Restaurar estado do header baseado no scroll
-        if (window.pageYOffset > 100) {
-          header.classList.add('scrolled');
-        } else {
-          header.classList.remove('scrolled');
+        if (window.innerWidth <= 576) { // Apenas no mobile
+          navMenu.classList.remove('active');
+          navToggle.classList.remove('active');
+          body.classList.remove('no-scroll');
+          navToggle.setAttribute('aria-expanded', 'false');
         }
       });
+    });
+    
+    // Fechar menu ao clicar fora (mobile)
+    document.addEventListener('click', function(event) {
+      if (window.innerWidth <= 576 && 
+          navMenu.classList.contains('active') &&
+          !navMenu.contains(event.target) && 
+          !navToggle.contains(event.target)) {
+        navMenu.classList.remove('active');
+        navToggle.classList.remove('active');
+        body.classList.remove('no-scroll');
+        navToggle.setAttribute('aria-expanded', 'false');
+      }
     });
   }
 }
@@ -344,7 +342,6 @@ function initSmoothScroll() {
 }
 
 // FUNÇÃO: CARREGAMENTO OTIMIZADO DE IMAGENS
-// Esta função pode ser usada para carregar imagens críticas de forma otimizada
 function loadCriticalImages() {
   // INSTRUÇÃO: Adicione aqui as imagens que devem ser carregadas prioritariamente
   const criticalImages = [
@@ -361,3 +358,14 @@ function loadCriticalImages() {
 
 // INICIALIZAR CARREGAMENTO DE IMAGENS CRÍTICAS
 loadCriticalImages();
+
+// FUNÇÃO: PREVENIR SCROLL QUANDO MENU ESTÁ ABERTO (MOBILE)
+document.addEventListener('DOMContentLoaded', function() {
+  const style = document.createElement('style');
+  style.textContent = `
+    body.no-scroll {
+      overflow: hidden;
+    }
+  `;
+  document.head.appendChild(style);
+});
