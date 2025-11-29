@@ -1,5 +1,3 @@
-scripts.js
-
 // SCRIPTS.JS - Funcionalidades do site do casamento
 // INSTRUÇÃO: Para alterar datas, endpoints ou conteúdo, edite as constantes abaixo
 
