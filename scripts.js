@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // FUNÇÃO: CONTROLE DO MENU TRANSPARENTE AO SCROLLAR
 function initHeaderScroll() {
   const header = document.querySelector('.header');
-  const scrollThreshold = 100; // Quantidade de scroll para ativar a mudança
+  const scrollThreshold = 100;
 
   function updateHeader() {
     if (window.pageYOffset > scrollThreshold) {
@@ -84,9 +84,8 @@ function initHeaderScroll() {
     }
   }
 
-  // Atualizar ao carregar e ao scrollar
   window.addEventListener('scroll', updateHeader);
-  updateHeader(); // Chamar uma vez para verificar o estado inicial
+  updateHeader();
 }
 
 // FUNÇÃO: NAVEGAÇÃO RESPONSIVA MELHORADA
@@ -198,8 +197,8 @@ function initHistorySection() {
   historyContainer.innerHTML = historyHTML;
 }
 
-// CONFIRMAÇÃO DE PRESENÇA - SISTEMA ATUALIZADO
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytMbBoSuVgeww4oJ37fbXMKvGATIC3-I0dIqs0nIoG14i6EBFa2thqRtD0O2Av7hus/exec';
+// CONFIRMAÇÃO DE PRESENÇA - SISTEMA CORRIGIDO
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzzC-lN3uZDce3Lr5c9N9wyU8NfrmYCMiN3lR4qMifF1WQ92FOyaOOFQnKxNw8yCaJ2/exec';
 
 // Elementos da DOM
 const buscarNomeInput = document.getElementById('buscarNome');
@@ -210,7 +209,6 @@ const formConfirmacaoFinal = document.getElementById('formConfirmacaoFinal');
 const btnCancelar = document.getElementById('btnCancelar');
 const popupClose = document.getElementById('popupClose');
 const mensagemRetornoDiv = document.getElementById('mensagemRetorno');
-const statusMessageDiv = document.getElementById('statusMessage');
 
 // Variáveis de controle
 let listaDeNomes = [];
@@ -232,6 +230,10 @@ buscarNomeInput.addEventListener('input', function() {
         return;
     }
     
+    // Mostrar loading na lista
+    resultadosBuscaDiv.innerHTML = '<div class="resultado-item loading">Buscando...</div>';
+    resultadosBuscaDiv.style.display = 'block';
+    
     timeoutBusca = setTimeout(() => {
         buscarNomes(termo);
     }, 300);
@@ -244,10 +246,8 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Função para carregar lista de nomes
+// Função para carregar lista de nomes (SEM MOSTRAR NÚMERO)
 function carregarListaDeNomes() {
-    mostrarStatus('Carregando lista de convidados...', 'loading');
-    
     fetch(SCRIPT_URL + '?action=getNomes')
         .then(response => {
             if (!response.ok) throw new Error('Erro na rede');
@@ -255,16 +255,13 @@ function carregarListaDeNomes() {
         })
         .then(nomes => {
             listaDeNomes = nomes.filter(nome => nome && nome.trim() !== '');
-            mostrarStatus(`${listaDeNomes.length} convidados encontrados`, 'success');
-            setTimeout(() => ocultarStatus(), 3000);
         })
         .catch(error => {
             console.error('Erro ao carregar nomes:', error);
-            mostrarStatus('Erro ao carregar lista. Tente recarregar a página.', 'error');
         });
 }
 
-// Função de busca
+// Função de busca melhorada
 function buscarNomes(termo) {
     const termoLower = termo.toLowerCase();
     const resultados = listaDeNomes.filter(nome => 
@@ -384,8 +381,10 @@ formConfirmacaoFinal.addEventListener('submit', function(e) {
         if (resultado === 'Sucesso') {
             exibirMensagemConfirmacao('✅ Presença confirmada com sucesso! Obrigado por confirmar.', 'success');
             fecharPopup();
-            // Remover nome da lista local
+            // Remover nome da lista local para não aparecer novamente
             listaDeNomes = listaDeNomes.filter(nome => nome !== nomeBuscado);
+        } else if (resultado === 'JaConfirmado') {
+            exibirMensagem('❌ Este convidado já foi confirmado anteriormente.', 'error');
         } else {
             exibirMensagem('❌ Erro na confirmação. Tente novamente mais tarde.', 'error');
         }
@@ -403,16 +402,6 @@ formConfirmacaoFinal.addEventListener('submit', function(e) {
 });
 
 // Funções auxiliares
-function mostrarStatus(mensagem, tipo) {
-    statusMessageDiv.textContent = mensagem;
-    statusMessageDiv.className = `status-message ${tipo}`;
-    statusMessageDiv.style.display = 'block';
-}
-
-function ocultarStatus() {
-    statusMessageDiv.style.display = 'none';
-}
-
 function exibirMensagem(mensagem, tipo) {
     mensagemRetornoDiv.innerHTML = mensagem;
     mensagemRetornoDiv.className = `confirmation-message ${tipo}`;
@@ -442,9 +431,8 @@ function limparFormulario() {
 }
 
 function validarDocumento(documento) {
-    // Remover caracteres não numéricos
     const docLimpo = documento.replace(/\D/g, '');
-    return docLimpo.length >= 8; // RG ou CPF mínimo
+    return docLimpo.length >= 8;
 }
 
 function validarEmail(email) {
