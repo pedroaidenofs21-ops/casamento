@@ -301,72 +301,140 @@
             </div>
         </section>
 
-        <!-- SEÇÃO CONFIRMAÇÃO DE PRESENÇA (RSVP) -->
-        <section id="confirmacao" class="section section-alt">
-            <div class="container">
-                <h2 class="section-title">Confirmação de Presença</h2>
-                <p class="section-intro">
-                    Sua presença é muito importante para nós! Por favor, confirme até 30 de setembro de 2026.
-                </p>
-                
-                <!-- FORMULÁRIO DE RSVP -->
-                <!-- INSTRUÇÃO: Para alterar o endpoint do formulário, edite a constante RSVP_ENDPOINT no JS -->
-                <form id="rsvp-form" class="rsvp-form">
+               <!-- CAMPO DE BUSCA -->
+        <div class="search-container">
+            <h3>Confirmar Presença</h3>
+            <p>Para confirmar sua presença, comece buscando seu nome na lista abaixo:</p>
+            <input type="text" id="buscarNome" class="form-input" placeholder="Digite seu nome completo...">
+            <div id="resultadosBusca" class="search-results"></div>
+        </div>
+        
+        <!-- POP-UP DE CONFIRMAÇÃO (OCULTO INICIALMENTE) -->
+        <div id="popupConfirmacao" class="popup-overlay">
+            <div class="popup-content">
+                <h3>Confirmar Presença</h3>
+                <p>Você está confirmando presença como: <strong id="nomeSelecionado"></strong></p>
+                <form id="formConfirmacaoFinal">
                     <div class="form-group">
-                        <label for="name" class="form-label">Nome completo *</label>
-                        <input type="text" id="name" name="name" class="form-input" required>
+                        <label for="nomeConfirmacao" class="form-label">Digite seu nome completo novamente *</label>
+                        <input type="text" id="nomeConfirmacao" name="nomeConfirmacao" class="form-input" required>
                     </div>
-                    
                     <div class="form-group">
-                        <label for="email" class="form-label">E-mail *</label>
-                        <input type="email" id="email" name="email" class="form-input" required>
+                        <label for="documento" class="form-label">RG ou CPF *</label>
+                        <input type="text" id="documento" name="documento" class="form-input" required>
                     </div>
-                    
                     <div class="form-group">
-                        <label for="phone" class="form-label">Telefone (opcional)</label>
-                        <input type="tel" id="phone" name="phone" class="form-input">
+                        <label for="emailConfirmacao" class="form-label">E-mail *</label>
+                        <input type="email" id="emailConfirmacao" name="emailConfirmacao" class="form-input" required>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="guests" class="form-label">Número de convidados *</label>
-                        <select id="guests" name="guests" class="form-select" required>
-                            <option value="" disabled selected>Selecione</option>
-                            <option value="1">1 pessoa (apenas eu)</option>
-                            <option value="2">2 pessoas (eu + 1 acompanhante)</option>
-                            <option value="3">3 pessoas</option>
-                            <option value="4">4 pessoas</option>
-                            <option value="5">5 ou mais pessoas</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Confirmo minha presença:</label>
-                        <div class="form-options">
-                            <label class="form-option">
-                                <input type="radio" name="attendance" value="yes" required>
-                                <span class="form-option-text">Sim, estarei presente!</span>
-                            </label>
-                            <label class="form-option">
-                                <input type="radio" name="attendance" value="no">
-                                <span class="form-option-text">Infelizmente não poderei comparecer</span>
-                            </label>
-                            <label class="form-option">
-                                <input type="radio" name="attendance" value="unsure">
-                                <span class="form-option-text">Ainda não tenho certeza</span>
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="message" class="form-label">Mensagem (opcional)</label>
-                        <textarea id="message" name="message" class="form-textarea" rows="4" placeholder="Deixe uma mensagem especial para os noivos..."></textarea>
-                    </div>
-                    
                     <div class="form-buttons">
                         <button type="submit" class="btn btn-primary">Confirmar Presença</button>
-                        <button type="reset" class="btn btn-secondary">Limpar Formulário</button>
+                        <button type="button" id="btnCancelar" class="btn btn-secondary">Cancelar</button>
                     </div>
                 </form>
+            </div>
+        </div>
+        
+        <!-- MENSAGEM DE RETORNO (OCULTA) -->
+        <div id="mensagemRetorno" class="form-message" aria-live="polite"></div>
+        
+        <script>
+        // URL do seu Apps Script (cole a URL que você copiou aqui)
+        const SCRIPT_URL = 'https://script.google.com/macros/s/SUA_URL_DO_SCRIPT_AQUI/exec';
+        
+        // Elementos da DOM
+        const buscarNomeInput = document.getElementById('buscarNome');
+        const resultadosBuscaDiv = document.getElementById('resultadosBusca');
+        const popup = document.getElementById('popupConfirmacao');
+        const nomeSelecionadoSpan = document.getElementById('nomeSelecionado');
+        const formConfirmacaoFinal = document.getElementById('formConfirmacaoFinal');
+        const btnCancelar = document.getElementById('btnCancelar');
+        const mensagemRetornoDiv = document.getElementById('mensagemRetorno');
+        
+        // Busca os nomes da planilha e filtra conforme o usuário digita
+        buscarNomeInput.addEventListener('input', function() {
+            const termoBusca = this.value.toLowerCase();
+            resultadosBuscaDiv.innerHTML = '';
+        
+            if (termoBusca.length < 3) return;
+        
+            // Carrega a lista de nomes da planilha via Google Apps Script
+            fetch(`${SCRIPT_URL}?action=getNomes`)
+                .then(response => response.json())
+                .then(nomes => {
+                    const resultados = nomes.filter(nome => nome.toLowerCase().includes(termoBusca));
+                    resultados.forEach(nome => {
+                        const div = document.createElement('div');
+                        div.className = 'resultado-item';
+                        div.textContent = nome;
+                        div.addEventListener('click', () => abrirPopupConfirmacao(nome));
+                        resultadosBuscaDiv.appendChild(div);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar nomes:', error);
+                });
+        });
+        
+        // Abre o pop-up quando o convidado clica em "Sou eu"
+        function abrirPopupConfirmacao(nome) {
+            nomeSelecionadoSpan.textContent = nome;
+            popup.style.display = 'flex';
+            document.getElementById('nomeConfirmacao').value = nome; // Pré-preenche o nome
+        }
+        
+        // Fecha o pop-up ao cancelar
+        btnCancelar.addEventListener('click', function() {
+            popup.style.display = 'none';
+            limparFormulario();
+        });
+        
+        // Processa a confirmação final
+        formConfirmacaoFinal.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const dados = {
+                nomeBuscado: nomeSelecionadoSpan.textContent,
+                nomeConfirmacao: document.getElementById('nomeConfirmacao').value,
+                documento: document.getElementById('documento').value,
+                email: document.getElementById('emailConfirmacao').value
+            };
+        
+            // Envia os dados para o Google Sheets via Apps Script
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify(dados)
+            })
+            .then(response => response.text())
+            .then(resultado => {
+                popup.style.display = 'none';
+                if (resultado === 'Sucesso') {
+                    exibirMensagem('Obrigado! Sua presença foi confirmada com sucesso.', 'success');
+                    // AQUI você pode chamar a função para enviar o e-mail automático
+                } else {
+                    exibirMensagem('Erro na confirmação. Tente novamente mais tarde.', 'error');
+                }
+                limparFormulario();
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                exibirMensagem('Erro na confirmação. Tente novamente mais tarde.', 'error');
+            });
+        });
+        
+        // Funções auxiliares
+        function exibirMensagem(mensagem, tipo) {
+            mensagemRetornoDiv.textContent = mensagem;
+            mensagemRetornoDiv.className = `form-message ${type}`;
+            mensagemRetornoDiv.style.display = 'block';
+        }
+        
+        function limparFormulario() {
+            buscarNomeInput.value = '';
+            resultadosBuscaDiv.innerHTML = '';
+            formConfirmacaoFinal.reset();
+        }
+        </script>
                 
                 <!-- MENSAGEM DE CONFIRMAÇÃO (OCULTA INICIALMENTE) -->
                 <div id="form-message" class="form-message" aria-live="polite"></div>
