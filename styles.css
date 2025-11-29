@@ -145,7 +145,7 @@ a {
   font-size: 1.1rem;
 }
 
-/* BOTÕES */
+/* BOTÕES ATUALIZADOS */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -173,16 +173,17 @@ a {
   box-shadow: var(--shadow);
 }
 
+/* BOTÃO SECUNDÁRIO AGORA É VERDE E BRANCO SEMPRE */
 .btn-secondary {
-  background-color: transparent;
-  color: var(--green-700);
-  border: 2px solid var(--green-700);
+  background-color: var(--green-700); /* VERDE SEMPRE */
+  color: var(--text-light); /* BRANCO SEMPRE */
+  border: 2px solid var(--green-700); /* BORDA VERDE */
 }
 
 .btn-secondary:hover, .btn-secondary:focus {
-  background-color: var(--green-700);
-  color: var(--text-light);
-  transform: translateY(-2px);
+  background-color: var(--green-700); /* MANTÉM VERDE NO HOVER */
+  color: var(--text-light); /* MANTÉM BRANCO NO HOVER */
+  transform: translateY(-2px); /* APENAS O MOVIMENTO */
   box-shadow: var(--shadow);
 }
 
