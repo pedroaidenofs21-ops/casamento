@@ -306,7 +306,7 @@ a {
   height: 1px;
   background-color: var(--text-light);
   transition: var(--transition);
-  transform: translateX(-50%);
+  transform: translateX(-50%;
 }
 
 .header.scrolled .nav-link::after {
@@ -570,6 +570,16 @@ a {
 .rule-icon svg {
   width: 32px;
   height: 32px;
+  transition: var(--transition);
+}
+
+.rule-item:hover .rule-icon svg {
+  transform: scale(1.1);
+}
+
+/* Garantir que os SVGs herdem a cor corretamente */
+.rule-icon {
+  color: var(--text-light);
 }
 
 .rule-item h3 {
@@ -1022,6 +1032,12 @@ a {
     font-size: 16px; /* Previne zoom no iOS */
   }
   
+  /* Responsividade para os novos ícones */
+  .rule-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+  
   /* FOOTER MELHORADO PARA MOBILE */
   .footer {
     padding: var(--space-lg) 0;
@@ -1095,5 +1111,36 @@ a {
     border: 1px solid var(--text-dark);
     background: none !important;
     color: var(--text-dark) !important;
+  }
+}
+
+/* MELHORIAS PARA OS NOVOS ÍCONES SVG */
+.rule-icon svg {
+  width: 32px;
+  height: 32px;
+  transition: var(--transition);
+}
+
+.rule-item:hover .rule-icon svg {
+  transform: scale(1.1);
+}
+
+/* Garantir que os SVGs herdem a cor corretamente */
+.rule-icon {
+  color: var(--text-light);
+}
+
+/* Responsividade para os novos ícones */
+@media (max-width: 768px) {
+  .rule-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 576px) {
+  .rule-icon svg {
+    width: 24px;
+    height: 24px;
   }
 }
