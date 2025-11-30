@@ -197,10 +197,11 @@ function initHistorySection() {
   historyContainer.innerHTML = historyHTML;
 }
 
-// CONFIRMAÇÃO DE PRESENÇA - SISTEMA 100% REFORMULADO
+// CONFIRMAÇÃO DE PRESENÇA - VERSÃO CORRIGIDA
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyusVzyL-clDFq8lbmrcFPbK1qothRfN9LASK2H8zjd1zmTPsq7vs1QAWNS5xsDuPpt/exec';
+
 class ConfirmacaoPresenca {
   constructor() {
-    this.SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxySsFpTWjNJ2oI7-4M_xp5c5tY3r3hw2JxTYosJh6jaH9Uzi4-UYqEHpB94AWP3DE/exec';
     this.listaDeNomes = [];
     this.listaCarregada = false;
     this.timeoutBusca = null;
@@ -260,13 +261,20 @@ class ConfirmacaoPresenca {
     console.log('📥 Carregando lista de convidados...');
     
     try {
-      const response = await fetch(this.SCRIPT_URL);
+      // Usando text/plain para evitar problemas de CORS
+      const response = await fetch(SCRIPT_URL, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'text/plain'
+        }
+      });
       
       if (!response.ok) {
         throw new Error(`Erro HTTP: ${response.status}`);
       }
       
-      const result = await response.json();
+      const text = await response.text();
+      const result = JSON.parse(text);
       
       if (result.success) {
         this.listaDeNomes = result.data;
@@ -425,10 +433,11 @@ class ConfirmacaoPresenca {
   }
   
   async enviarConfirmacao(dados) {
-    const response = await fetch(this.SCRIPT_URL, {
+    // Usando text/plain para evitar problemas de CORS
+    const response = await fetch(SCRIPT_URL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'text/plain;charset=utf-8',
       },
       body: JSON.stringify(dados)
     });
@@ -437,7 +446,8 @@ class ConfirmacaoPresenca {
       throw new Error(`Erro HTTP: ${response.status}`);
     }
     
-    return await response.json();
+    const text = await response.text();
+    return JSON.parse(text);
   }
   
   processarRespostaConfirmacao(resultado, nomeBuscado) {
