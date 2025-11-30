@@ -5,7 +5,7 @@
 // =========================================
 
 // DATA DO CASAMENTO - INSTRUÇÃO: Altere para a data do seu evento
-const EVENT_DATE = new Date('2026-11-28T16:00:00'); // Formato: AAAA-MM-DDTHH:MM:SS
+const EVENT_DATE = new Date('2026-11-28T17:00:00'); // Formato: AAAA-MM-DDTHH:MM:SS
 
 // ENDPOINT DO FORMULÁRIO RSVP - INSTRUÇÃO: Substitua pela URL do seu endpoint
 const RSVP_ENDPOINT = 'https://exemplo.com/api/rsvp'; // URL do backend para receber os RSVPs
