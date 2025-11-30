@@ -197,277 +197,328 @@ function initHistorySection() {
   historyContainer.innerHTML = historyHTML;
 }
 
-// CONFIRMAÇÃO DE PRESENÇA - SISTEMA CORRIGIDO
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby8i-Azp4pNAgNYokQVQC6Fpa9qfkfKKc9_0-p9S1sXfLsg9xEkckPm34s91uR-_PVr/exec';
-
-// Elementos da DOM
-const buscarNomeInput = document.getElementById('buscarNome');
-const resultadosBuscaDiv = document.getElementById('resultadosBusca');
-const popup = document.getElementById('popupConfirmacao');
-const nomeSelecionadoSpan = document.getElementById('nomeSelecionado');
-const formConfirmacaoFinal = document.getElementById('formConfirmacaoFinal');
-const btnCancelar = document.getElementById('btnCancelar');
-const popupClose = document.getElementById('popupClose');
-const mensagemRetornoDiv = document.getElementById('mensagemRetorno');
-
-// Variáveis de controle
-let listaDeNomes = [];
-let timeoutBusca = null;
-let listaCarregada = false;
-
-// Carregar lista de nomes ao iniciar
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Iniciando carregamento da lista de convidados...');
-    carregarListaDeNomes();
-});
-
-// Busca em tempo real com debounce
-buscarNomeInput.addEventListener('input', function() {
-    clearTimeout(timeoutBusca);
-    const termo = this.value.trim();
+// CONFIRMAÇÃO DE PRESENÇA - SISTEMA 100% REFORMULADO
+class ConfirmacaoPresenca {
+  constructor() {
+    this.SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxySsFpTWjNJ2oI7-4M_xp5c5tY3r3hw2JxTYosJh6jaH9Uzi4-UYqEHpB94AWP3DE/exec';
+    this.listaDeNomes = [];
+    this.listaCarregada = false;
+    this.timeoutBusca = null;
     
-    if (termo.length < 2) {
-        resultadosBuscaDiv.style.display = 'none';
-        resultadosBuscaDiv.innerHTML = '';
-        return;
+    this.inicializar();
+  }
+  
+  inicializar() {
+    console.log('🎯 Inicializando sistema de confirmação...');
+    this.carregarElementos();
+    this.configurarEventos();
+    this.carregarListaDeNomes();
+  }
+  
+  carregarElementos() {
+    this.buscarNomeInput = document.getElementById('buscarNome');
+    this.resultadosBuscaDiv = document.getElementById('resultadosBusca');
+    this.popup = document.getElementById('popupConfirmacao');
+    this.nomeSelecionadoSpan = document.getElementById('nomeSelecionado');
+    this.formConfirmacaoFinal = document.getElementById('formConfirmacaoFinal');
+    this.btnCancelar = document.getElementById('btnCancelar');
+    this.popupClose = document.getElementById('popupClose');
+    this.mensagemRetornoDiv = document.getElementById('mensagemRetorno');
+  }
+  
+  configurarEventos() {
+    // Busca em tempo real
+    this.buscarNomeInput.addEventListener('input', (e) => {
+      this.handleBuscaInput(e.target.value);
+    });
+    
+    // Fechar resultados ao clicar fora
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.search-box')) {
+        this.esconderResultados();
+      }
+    });
+    
+    // Popup events
+    this.btnCancelar.addEventListener('click', () => this.fecharPopup());
+    this.popupClose.addEventListener('click', () => this.fecharPopup());
+    
+    this.popup.addEventListener('click', (e) => {
+      if (e.target === this.popup) {
+        this.fecharPopup();
+      }
+    });
+    
+    // Form submission
+    this.formConfirmacaoFinal.addEventListener('submit', (e) => {
+      e.preventDefault();
+      this.processarConfirmacao();
+    });
+  }
+  
+  async carregarListaDeNomes() {
+    console.log('📥 Carregando lista de convidados...');
+    
+    try {
+      const response = await fetch(this.SCRIPT_URL);
+      
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        this.listaDeNomes = result.data;
+        this.listaCarregada = true;
+        console.log(`✅ ${this.listaDeNomes.length} convidados carregados com sucesso`);
+      } else {
+        throw new Error(result.error || 'Erro desconhecido');
+      }
+      
+    } catch (error) {
+      console.error('❌ Erro ao carregar lista:', error);
+      this.exibirMensagem('Erro ao carregar lista de convidados. Tente recarregar a página.', 'error');
+      
+      // Tentar novamente após 5 segundos
+      setTimeout(() => this.carregarListaDeNomes(), 5000);
+    }
+  }
+  
+  handleBuscaInput(termo) {
+    clearTimeout(this.timeoutBusca);
+    
+    const termoLimpo = termo.trim();
+    
+    if (termoLimpo.length < 2) {
+      this.esconderResultados();
+      return;
     }
     
-    if (!listaCarregada) {
-        resultadosBuscaDiv.innerHTML = '<div class="resultado-item loading">Carregando lista de convidados...</div>';
-        resultadosBuscaDiv.style.display = 'block';
-        return;
+    if (!this.listaCarregada) {
+      this.mostrarResultados([], '⌛ Carregando lista de convidados...');
+      return;
     }
     
-    timeoutBusca = setTimeout(() => {
-        buscarNomes(termo);
+    this.timeoutBusca = setTimeout(() => {
+      this.executarBusca(termoLimpo);
     }, 300);
-});
-
-// Fechar resultados ao clicar fora
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.search-box')) {
-        resultadosBuscaDiv.style.display = 'none';
-    }
-});
-
-// Função para carregar lista de nomes
-function carregarListaDeNomes() {
-    console.log('Fazendo requisição para: ' + SCRIPT_URL);
-    
-    fetch(SCRIPT_URL)
-        .then(response => {
-            console.log('Resposta recebida:', response);
-            if (!response.ok) {
-                throw new Error('Erro na rede: ' + response.status);
-            }
-            return response.json();
-        })
-        .then(nomes => {
-            console.log('Nomes recebidos:', nomes);
-            listaDeNomes = nomes.filter(nome => nome && nome.trim() !== '');
-            listaCarregada = true;
-            console.log('Lista carregada com ' + listaDeNomes.length + ' nomes');
-        })
-        .catch(error => {
-            console.error('Erro ao carregar nomes:', error);
-            // Tentar novamente após 3 segundos
-            setTimeout(carregarListaDeNomes, 3000);
-        });
-}
-
-// Função de busca melhorada
-function buscarNomes(termo) {
+  }
+  
+  executarBusca(termo) {
     const termoLower = termo.toLowerCase();
-    const resultados = listaDeNomes.filter(nome => 
-        nome.toLowerCase().includes(termoLower)
+    const resultados = this.listaDeNomes.filter(nome => 
+      nome.toLowerCase().includes(termoLower)
     );
-
-    console.log('Buscando por:', termo, 'Resultados:', resultados);
     
-    resultadosBuscaDiv.innerHTML = '';
+    console.log(`🔍 Busca por "${termo}": ${resultados.length} resultados`);
     
     if (resultados.length === 0) {
-        resultadosBuscaDiv.innerHTML = `
-            <div class="resultado-item no-results">
-                Nenhum convidado encontrado com "${termo}"
-            </div>
-        `;
+      this.mostrarResultados([], `Nenhum convidado encontrado com "${termo}"`);
     } else {
-        resultados.forEach(nome => {
-            const div = document.createElement('div');
-            div.className = 'resultado-item';
-            div.innerHTML = `
-                <span class="result-name">${nome}</span>
-                <button class="btn-select" data-nome="${nome}">Sou eu</button>
-            `;
-            resultadosBuscaDiv.appendChild(div);
-            
-            // Adicionar evento ao botão
-            div.querySelector('.btn-select').addEventListener('click', function() {
-                const nomeConvidado = this.getAttribute('data-nome');
-                abrirPopupConfirmacao(nomeConvidado);
-            });
+      this.mostrarResultados(resultados);
+    }
+  }
+  
+  mostrarResultados(resultados, mensagemVazia = null) {
+    this.resultadosBuscaDiv.innerHTML = '';
+    
+    if (mensagemVazia) {
+      this.resultadosBuscaDiv.innerHTML = `
+        <div class="resultado-item no-results">${mensagemVazia}</div>
+      `;
+    } else {
+      resultados.forEach(nome => {
+        const div = document.createElement('div');
+        div.className = 'resultado-item';
+        div.innerHTML = `
+          <span class="result-name">${nome}</span>
+          <button class="btn-select" data-nome="${nome}">Sou eu</button>
+        `;
+        
+        div.querySelector('.btn-select').addEventListener('click', () => {
+          this.abrirPopupConfirmacao(nome);
         });
+        
+        this.resultadosBuscaDiv.appendChild(div);
+      });
     }
     
-    resultadosBuscaDiv.style.display = 'block';
-}
-
-// Abrir popup de confirmação
-function abrirPopupConfirmacao(nome) {
-    console.log('Abrindo popup para:', nome);
-    nomeSelecionadoSpan.textContent = nome;
-    popup.style.display = 'flex';
+    this.resultadosBuscaDiv.style.display = 'block';
+  }
+  
+  esconderResultados() {
+    this.resultadosBuscaDiv.style.display = 'none';
+  }
+  
+  abrirPopupConfirmacao(nome) {
+    console.log(`👤 Abrindo popup para: ${nome}`);
+    
+    this.nomeSelecionadoSpan.textContent = nome;
+    this.popup.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     
     // Pré-preencher o campo de nome
     document.getElementById('nomeConfirmacao').value = nome;
     document.getElementById('nomeConfirmacao').focus();
     
-    // Esconder resultados da busca
-    resultadosBuscaDiv.style.display = 'none';
-    buscarNomeInput.value = '';
-}
-
-// Fechar popup
-function fecharPopup() {
-    popup.style.display = 'none';
+    this.esconderResultados();
+    this.buscarNomeInput.value = '';
+  }
+  
+  fecharPopup() {
+    this.popup.style.display = 'none';
     document.body.style.overflow = 'auto';
-    limparFormulario();
-}
-
-// Event listeners para fechar popup
-btnCancelar.addEventListener('click', fecharPopup);
-popupClose.addEventListener('click', fecharPopup);
-
-// Fechar popup ao clicar fora do conteúdo
-popup.addEventListener('click', function(e) {
-    if (e.target === popup) {
-        fecharPopup();
-    }
-});
-
-// Processar confirmação final
-formConfirmacaoFinal.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const nomeBuscado = nomeSelecionadoSpan.textContent;
+    this.limparFormulario();
+  }
+  
+  async processarConfirmacao() {
+    const nomeBuscado = this.nomeSelecionadoSpan.textContent;
     const nomeConfirmacao = document.getElementById('nomeConfirmacao').value.trim();
     const documento = document.getElementById('documento').value.trim();
     const email = document.getElementById('emailConfirmacao').value.trim();
     
-    console.log('Enviando confirmação:', { nomeBuscado, nomeConfirmacao, documento, email });
+    console.log('📤 Enviando confirmação:', { nomeBuscado, nomeConfirmacao, documento, email });
     
     // Validações
+    if (!this.validarConfirmacao(nomeBuscado, nomeConfirmacao, documento, email)) {
+      return;
+    }
+    
+    this.mostrarLoading(true);
+    
+    try {
+      const resultado = await this.enviarConfirmacao({
+        nomeBuscado,
+        nomeConfirmacao,
+        documento,
+        email
+      });
+      
+      this.processarRespostaConfirmacao(resultado, nomeBuscado);
+      
+    } catch (error) {
+      console.error('❌ Erro na confirmação:', error);
+      this.exibirMensagem('❌ Erro de conexão. Tente novamente.', 'error');
+    } finally {
+      this.mostrarLoading(false);
+    }
+  }
+  
+  validarConfirmacao(nomeBuscado, nomeConfirmacao, documento, email) {
     if (nomeConfirmacao.toLowerCase() !== nomeBuscado.toLowerCase()) {
-        exibirMensagem('O nome digitado não confere com o nome selecionado.', 'error');
-        return;
+      this.exibirMensagem('O nome digitado não confere com o nome selecionado.', 'error');
+      return false;
     }
     
-    if (!validarDocumento(documento)) {
-        exibirMensagem('Por favor, digite um RG ou CPF válido.', 'error');
-        return;
+    if (!this.validarDocumento(documento)) {
+      this.exibirMensagem('Por favor, digite um RG ou CPF válido (mínimo 8 dígitos).', 'error');
+      return false;
     }
     
-    if (!validarEmail(email)) {
-        exibirMensagem('Por favor, digite um e-mail válido.', 'error');
-        return;
+    if (!this.validarEmail(email)) {
+      this.exibirMensagem('Por favor, digite um e-mail válido.', 'error');
+      return false;
     }
     
-    // Mostrar loading
-    const btnSubmit = this.querySelector('.btn-primary');
+    return true;
+  }
+  
+  async enviarConfirmacao(dados) {
+    const response = await fetch(this.SCRIPT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dados)
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Erro HTTP: ${response.status}`);
+    }
+    
+    return await response.json();
+  }
+  
+  processarRespostaConfirmacao(resultado, nomeBuscado) {
+    if (resultado.success) {
+      this.exibirMensagemConfirmacao('✅ Presença confirmada com sucesso! Obrigado por confirmar.');
+      this.fecharPopup();
+      
+      // Remover nome da lista local
+      this.listaDeNomes = this.listaDeNomes.filter(nome => nome !== nomeBuscado);
+      
+    } else {
+      let mensagemErro = '❌ Erro na confirmação. Tente novamente.';
+      
+      if (resultado.error === 'JA_CONFIRMADO') {
+        mensagemErro = '❌ Este convidado já foi confirmado anteriormente.';
+      } else if (resultado.error === 'NAO_ENCONTRADO') {
+        mensagemErro = '❌ Nome não encontrado na lista de convidados.';
+      }
+      
+      this.exibirMensagem(mensagemErro, 'error');
+    }
+  }
+  
+  mostrarLoading(mostrar) {
+    const btnSubmit = this.formConfirmacaoFinal.querySelector('.btn-primary');
     const btnText = btnSubmit.querySelector('.btn-text');
     const btnLoading = btnSubmit.querySelector('.btn-loading');
     
-    btnText.style.display = 'none';
-    btnLoading.style.display = 'flex';
-    btnSubmit.disabled = true;
-    
-    // Enviar dados
-    const dados = {
-        nomeBuscado: nomeBuscado,
-        nomeConfirmacao: nomeConfirmacao,
-        documento: documento,
-        email: email
-    };
-    
-    fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'text/plain;charset=utf-8',
-        },
-        body: JSON.stringify(dados)
-    })
-    .then(response => {
-        console.log('Resposta do POST:', response);
-        return response.text();
-    })
-    .then(resultado => {
-        console.log('Resultado da confirmação:', resultado);
-        
-        if (resultado === 'Sucesso') {
-            exibirMensagemConfirmacao('✅ Presença confirmada com sucesso! Obrigado por confirmar.', 'success');
-            fecharPopup();
-            // Remover nome da lista local para não aparecer novamente
-            listaDeNomes = listaDeNomes.filter(nome => nome !== nomeBuscado);
-        } else if (resultado === 'JaConfirmado') {
-            exibirMensagem('❌ Este convidado já foi confirmado anteriormente.', 'error');
-        } else if (resultado === 'Nome não encontrado') {
-            exibirMensagem('❌ Nome não encontrado na lista de convidados.', 'error');
-        } else {
-            exibirMensagem('❌ Erro na confirmação. Tente novamente mais tarde.', 'error');
-        }
-    })
-    .catch(error => {
-        console.error('Erro na requisição:', error);
-        exibirMensagem('❌ Erro de conexão. Verifique sua internet e tente novamente.', 'error');
-    })
-    .finally(() => {
-        // Restaurar botão
-        btnText.style.display = 'block';
-        btnLoading.style.display = 'none';
-        btnSubmit.disabled = false;
-    });
-});
-
-// Funções auxiliares
-function exibirMensagem(mensagem, tipo) {
-    mensagemRetornoDiv.innerHTML = mensagem;
-    mensagemRetornoDiv.className = `confirmation-message ${tipo}`;
-    mensagemRetornoDiv.style.display = 'block';
+    if (mostrar) {
+      btnText.style.display = 'none';
+      btnLoading.style.display = 'flex';
+      btnSubmit.disabled = true;
+    } else {
+      btnText.style.display = 'block';
+      btnLoading.style.display = 'none';
+      btnSubmit.disabled = false;
+    }
+  }
+  
+  exibirMensagem(mensagem, tipo) {
+    this.mensagemRetornoDiv.innerHTML = mensagem;
+    this.mensagemRetornoDiv.className = `confirmation-message ${tipo}`;
+    this.mensagemRetornoDiv.style.display = 'block';
     
     setTimeout(() => {
-        mensagemRetornoDiv.style.display = 'none';
+      this.mensagemRetornoDiv.style.display = 'none';
     }, 5000);
-}
-
-function exibirMensagemConfirmacao(mensagem, tipo) {
-    mensagemRetornoDiv.innerHTML = `
-        <div class="confirmation-success">
-            <div class="success-icon">🎉</div>
-            <div class="success-message">${mensagem}</div>
-            <div class="success-details">Enviaremos todas as informações para o e-mail cadastrado.</div>
-        </div>
+  }
+  
+  exibirMensagemConfirmacao(mensagem) {
+    this.mensagemRetornoDiv.innerHTML = `
+      <div class="confirmation-success">
+        <div class="success-icon">🎉</div>
+        <div class="success-message">${mensagem}</div>
+        <div class="success-details">Enviaremos todas as informações para o e-mail cadastrado.</div>
+      </div>
     `;
-    mensagemRetornoDiv.className = `confirmation-message ${tipo}`;
-    mensagemRetornoDiv.style.display = 'block';
-}
-
-function limparFormulario() {
-    formConfirmacaoFinal.reset();
-    resultadosBuscaDiv.innerHTML = '';
-    resultadosBuscaDiv.style.display = 'none';
-}
-
-function validarDocumento(documento) {
+    this.mensagemRetornoDiv.className = 'confirmation-message success';
+    this.mensagemRetornoDiv.style.display = 'block';
+  }
+  
+  limparFormulario() {
+    this.formConfirmacaoFinal.reset();
+    this.esconderResultados();
+  }
+  
+  validarDocumento(documento) {
     const docLimpo = documento.replace(/\D/g, '');
     return docLimpo.length >= 8;
-}
-
-function validarEmail(email) {
+  }
+  
+  validarEmail(email) {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
+  }
 }
+
+// Inicializar o sistema quando o DOM estiver carregado
+document.addEventListener('DOMContentLoaded', function() {
+  new ConfirmacaoPresenca();
+});
 
 // FUNÇÃO: BOTÃO "VOLTAR AO TOPO"
 function initBackToTop() {
