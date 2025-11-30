@@ -198,7 +198,7 @@ function initHistorySection() {
 }
 
 // CONFIRMAÇÃO DE PRESENÇA - SISTEMA CORRIGIDO
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxKs5bjwiDb9ExzXa6tfLxYFju4E9NH8j4weVj_t97ZU2DT0rc4lafEzyEc_lGHIu7h/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby8i-Azp4pNAgNYokQVQC6Fpa9qfkfKKc9_0-p9S1sXfLsg9xEkckPm34s91uR-_PVr/exec';
 
 // Elementos da DOM
 const buscarNomeInput = document.getElementById('buscarNome');
