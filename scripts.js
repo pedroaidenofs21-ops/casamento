@@ -61,31 +61,98 @@ const historyItems = [
 document.addEventListener('DOMContentLoaded', function() {
   // Inicializar todas as funcionalidades
   initNavigation();
+  initHeaderScroll(); // NOVA FUNÇÃO ATUALIZADA
+  initMobileMenuClose(); // NOVA FUNÇÃO
   initCountdown();
   initHistorySection();
   initRSVPForm();
   initBackToTop();
   initSmoothScroll();
-  initHeaderScroll();
   
   console.log('Site do casamento carregado com sucesso!');
 });
 
-// FUNÇÃO: CONTROLE DO MENU TRANSPARENTE AO SCROLLAR
+/**
+ * FUNÇÃO: CONTROLE DO HEADER TRANSPARENTE/SÓLIDO
+ * Nova versão - mais robusta e com melhor performance
+ */
 function initHeaderScroll() {
   const header = document.querySelector('.header');
-  const scrollThreshold = 100;
+  const scrollThreshold = 50; // Menor threshold para resposta mais rápida
+  let lastScrollY = window.pageYOffset;
+  let ticking = false;
 
-  function updateHeader() {
-    if (window.pageYOffset > scrollThreshold) {
-      header.classList.add('scrolled');
+  // Verificar estado inicial
+  function checkHeaderState() {
+    const currentScrollY = window.pageYOffset;
+    
+    if (currentScrollY > scrollThreshold) {
+      // Scrolled - header sólido
+      header.classList.remove('header--transparent');
+      header.classList.add('header--solid');
     } else {
-      header.classList.remove('scrolled');
+      // Topo - header transparente
+      header.classList.remove('header--solid');
+      header.classList.add('header--transparent');
+    }
+    
+    lastScrollY = currentScrollY;
+    ticking = false;
+  }
+
+  // Otimização de performance com requestAnimationFrame
+  function updateHeader() {
+    if (!ticking) {
+      requestAnimationFrame(checkHeaderState);
+      ticking = true;
     }
   }
 
-  window.addEventListener('scroll', updateHeader);
+  // Event listeners
+  window.addEventListener('scroll', updateHeader, { passive: true });
+  window.addEventListener('resize', updateHeader, { passive: true });
+  window.addEventListener('load', updateHeader);
+
+  // Estado inicial
   updateHeader();
+}
+
+/**
+ * FUNÇÃO: FECHAR MENU MOBILE AO CLICAR FORA
+ */
+function initMobileMenuClose() {
+  const navToggle = document.querySelector('.nav-toggle');
+  const navMenu = document.querySelector('.nav-menu');
+  const body = document.body;
+
+  // Verificar se estamos em mobile
+  function isMobile() {
+    return window.innerWidth <= 576;
+  }
+
+  document.addEventListener('click', function(event) {
+    if (!isMobile()) return;
+    
+    const isClickInsideMenu = navMenu.contains(event.target);
+    const isClickOnToggle = navToggle.contains(event.target);
+    
+    if (!isClickInsideMenu && !isClickOnToggle && navMenu.classList.contains('active')) {
+      navMenu.classList.remove('active');
+      navToggle.classList.remove('active');
+      body.classList.remove('no-scroll');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Também fechar menu ao redimensionar para desktop
+  window.addEventListener('resize', function() {
+    if (!isMobile() && navMenu.classList.contains('active')) {
+      navMenu.classList.remove('active');
+      navToggle.classList.remove('active');
+      body.classList.remove('no-scroll');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
 }
 
 // FUNÇÃO: NAVEGAÇÃO RESPONSIVA MELHORADA
@@ -114,19 +181,6 @@ function initNavigation() {
           navToggle.setAttribute('aria-expanded', 'false');
         }
       });
-    });
-    
-    // Fechar menu ao clicar fora (mobile)
-    document.addEventListener('click', function(event) {
-      if (window.innerWidth <= 576 && 
-          navMenu.classList.contains('active') &&
-          !navMenu.contains(event.target) && 
-          !navToggle.contains(event.target)) {
-        navMenu.classList.remove('active');
-        navToggle.classList.remove('active');
-        body.classList.remove('no-scroll');
-        navToggle.setAttribute('aria-expanded', 'false');
-      }
     });
   }
 }
