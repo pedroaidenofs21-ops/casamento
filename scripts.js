@@ -71,42 +71,21 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log('Site do casamento carregado com sucesso!');
 });
 
-// FUNÇÃO: CONTROLE DO MENU TRANSPARENTE AO SCROLLAR - VERSÃO DEFINITIVA
+// FUNÇÃO: CONTROLE DO MENU TRANSPARENTE AO SCROLLAR
 function initHeaderScroll() {
   const header = document.querySelector('.header');
-  if (!header) {
-    console.error('Header element not found!');
-    return;
-  }
+  const scrollThreshold = 100;
 
-  function handleScroll() {
-    const scrollPosition = window.scrollY || document.documentElement.scrollTop;
-    
-    if (scrollPosition > 50) {
+  function updateHeader() {
+    if (window.pageYOffset > scrollThreshold) {
       header.classList.add('scrolled');
-      console.log('🔄 Header: SCROLLED (branco + logo verde)');
     } else {
       header.classList.remove('scrolled');
-      console.log('🔄 Header: TRANSPARENTE (logo branco)');
     }
   }
 
-  // Otimizado com throttle
-  let ticking = false;
-  function throttledScroll() {
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        handleScroll();
-        ticking = false;
-      });
-      ticking = true;
-    }
-  }
-
-  window.addEventListener('scroll', throttledScroll, { passive: true });
-  
-  // Chamar uma vez para definir estado inicial
-  handleScroll();
+  window.addEventListener('scroll', updateHeader);
+  updateHeader();
 }
 
 // FUNÇÃO: NAVEGAÇÃO RESPONSIVA MELHORADA
