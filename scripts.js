@@ -437,72 +437,65 @@ class ConfirmacaoPresenca {
   async processarConfirmacao() {
     const nomeBuscado = this.nomeSelecionadoSpan.textContent;
     const nomeConfirmacao = document.getElementById('nomeConfirmacao').value.trim();
-    const documento = document.getElementById('documento').value.trim();
     const email = document.getElementById('emailConfirmacao').value.trim();
     
-    console.log('📤 Enviando confirmação:', { nomeBuscado, nomeConfirmacao, documento, email });
+    console.log('📤 Enviando confirmação:', { nomeBuscado, nomeConfirmacao, email });
     
-    // Validações
-    if (!this.validarConfirmacao(nomeBuscado, nomeConfirmacao, documento, email)) {
-      return;
+    // Validações (SEM CPF)
+    if (!this.validarConfirmacao(nomeBuscado, nomeConfirmacao, email)) {
+        return;
     }
     
     this.mostrarLoading(true);
     
     try {
-      const resultado = await this.enviarConfirmacao({
-        nomeBuscado,
-        nomeConfirmacao,
-        documento,
-        email
-      });
-      
-      this.processarRespostaConfirmacao(resultado, nomeBuscado);
-      
+        const resultado = await this.enviarConfirmacao({
+            nomeBuscado,
+            nomeConfirmacao,
+            email // ENVIA APENAS NOME E EMAIL
+        });
+        
+        this.processarRespostaConfirmacao(resultado, nomeBuscado);
+        
     } catch (error) {
-      console.error('❌ Erro na confirmação:', error);
-      this.exibirMensagem('❌ Erro de conexão. Tente novamente.', 'error');
+        console.error('❌ Erro na confirmação:', error);
+        this.exibirMensagem('❌ Erro de conexão. Tente novamente.', 'error');
     } finally {
-      this.mostrarLoading(false);
+        this.mostrarLoading(false);
     }
-  }
+}
   
-  validarConfirmacao(nomeBuscado, nomeConfirmacao, documento, email) {
+  validarConfirmacao(nomeBuscado, nomeConfirmacao, email) {
     if (nomeConfirmacao.toLowerCase() !== nomeBuscado.toLowerCase()) {
-      this.exibirMensagem('O nome digitado não confere com o nome selecionado.', 'error');
-      return false;
-    }
-    
-    if (!this.validarDocumento(documento)) {
-      this.exibirMensagem('Por favor, digite um RG ou CPF válido (mínimo 8 dígitos).', 'error');
-      return false;
+        this.exibirMensagem('O nome digitado não confere com o nome selecionado.', 'error');
+        return false;
     }
     
     if (!this.validarEmail(email)) {
-      this.exibirMensagem('Por favor, digite um e-mail válido.', 'error');
-      return false;
+        this.exibirMensagem('Por favor, digite um e-mail válido.', 'error');
+        return false;
     }
     
     return true;
-  }
+}
   
   async enviarConfirmacao(dados) {
     // Usando text/plain para evitar problemas de CORS
     const response = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'text/plain;charset=utf-8',
-      },
-      body: JSON.stringify(dados)
+        method: 'POST',
+        headers: {
+            'Content-Type': 'text/plain;charset=utf-8',
+        },
+        body: JSON.stringify(dados)
     });
     
     if (!response.ok) {
-      throw new Error(`Erro HTTP: ${response.status}`);
+        throw new Error(`Erro HTTP: ${response.status}`);
     }
     
     const text = await response.text();
     return JSON.parse(text);
-  }
+}
   
   processarRespostaConfirmacao(resultado, nomeBuscado) {
     if (resultado.success) {
@@ -566,11 +559,6 @@ class ConfirmacaoPresenca {
   limparFormulario() {
     this.formConfirmacaoFinal.reset();
     this.esconderResultados();
-  }
-  
-  validarDocumento(documento) {
-    const docLimpo = documento.replace(/\D/g, '');
-    return docLimpo.length >= 8;
   }
   
   validarEmail(email) {
