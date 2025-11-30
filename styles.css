@@ -1510,3 +1510,57 @@ a {
     height: 24px;
   }
 }
+
+/* CORREÇÕES PARA HEADER SCROLL - GARANTIR FUNCIONAMENTO */
+.header.scrolled {
+  background-color: var(--menu-bg-scrolled) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1) !important;
+  border-bottom: 1px solid var(--gray-medium) !important;
+}
+
+/* GARANTIR QUE AS LOGOS MUDEM CORRETAMENTE */
+.header:not(.scrolled) .logo-white {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.header:not(.scrolled) .logo-green {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+.header.scrolled .logo-white {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+.header.scrolled .logo-green {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* TRANSITION MAIS SUAVE PARA AS LOGOS */
+.logo-img {
+  transition: opacity 0.4s ease, visibility 0.4s ease !important;
+}
+
+/* GARANTIR QUE O HEADER TENHA TRANSITION */
+.header {
+  transition: all 0.4s ease !important;
+}
+
+/* CORREÇÃO PARA O MENU SCROLLED */
+.header.scrolled .nav-link {
+  color: var(--text-dark) !important;
+}
+
+.header.scrolled .nav-link:hover,
+.header.scrolled .nav-link:focus {
+  color: var(--green-700) !important;
+  background-color: rgba(0, 104, 81, 0.1) !important;
+}
+
+.header.scrolled .nav-toggle span {
+  background-color: var(--text-dark) !important;
+}
