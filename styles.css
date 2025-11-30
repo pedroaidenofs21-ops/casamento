@@ -1,1566 +1,616 @@
-/* 
- * STYLES.CSS - Estilos para o site do casamento
- * INSTRUÇÃO: Para alterar cores, fontes ou espaçamentos, edite as variáveis abaixo
- */
-
-/* VARIÁVEIS DE CORES E FONTES */
-:root {
-  /* PALETA DE CORES - INSTRUÇÃO: Altere os valores hexadecimais conforme sua paleta */
-  --green-700: #006851;     /* Verde primário (background/headers) */
-  --green-600: #00765C;     /* Verde secundário (mais claro) */
-  --accent: #DAA520;        /* Amarelo/dourado (botões) */
-  --accent-light: #F0B61E;  /* Amarelo claro (hover) */
-  --text-dark: #737071;     /* Cinza escuro (textos) */
-  --text-light: #FFFFFF;    /* Branco (textos sobre fundo escuro) */
-  --gray-light: #F5F5F5;    /* Cinza claro (cards/rodapé) */
-  --gray-medium: #E0E0E0;   /* Cinza médio (bordas) */
-  
-  /* NOVAS CORES PARA O MENU TRANSPARENTE */
-  --menu-bg-transparent: rgba(255, 255, 255, 0.1);
-  --menu-bg-scrolled: rgba(255, 255, 255, 0.95);
-  --menu-text-light: rgba(255, 255, 255, 0.9);
-  --menu-border-light: rgba(255, 255, 255, 0.2);
-  
-  /* TIPOGRAFIA - INSTRUÇÃO: Para trocar fontes, altere as famílias abaixo */
-  --font-heading: 'Playfair Display', serif;
-  --font-body: 'Inter', sans-serif;
-  
-  /* ESPAÇAMENTOS */
-  --space-xs: 0.5rem;
-  --space-sm: 1rem;
-  --space-md: 1.5rem;
-  --space-lg: 2rem;
-  --space-xl: 3rem;
-  --space-xxl: 5rem;
-  
-  /* BORDAS E SOMBRAS */
-  --border-radius: 8px;
-  --border-radius-lg: 16px;
-  --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
-  
-  /* TRANSITIONS */
-  --transition: all 0.3s ease;
-}
-
-/* RESET E CONFIGURAÇÕES GERAIS */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-  font-size: 16px;
-}
-
-/* Desativar animações para usuários que preferem movimento reduzido */
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-body {
-  font-family: var(--font-body);
-  font-weight: 400;
-  line-height: 1.6;
-  color: var(--text-dark);
-  background-color: #FFFFFF;
-  overflow-x: hidden;
-}
-
-/* TIPOGRAFIA */
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading);
-  font-weight: 600;
-  line-height: 1.2;
-  margin-bottom: var(--space-md);
-}
-
-h1 {
-  font-size: 3rem;
-}
-
-h2 {
-  font-size: 2.5rem;
-}
-
-h3 {
-  font-size: 1.5rem;
-}
-
-p {
-  margin-bottom: var(--space-md);
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-/* LAYOUT E CONTAINERS */
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 var(--space-md);
-}
-
-.section {
-  padding: var(--space-xxl) 0;
-}
-
-.section-alt {
-  background-color: var(--gray-light);
-}
-
-.section-title {
-  text-align: center;
-  margin-bottom: var(--space-lg);
-  color: var(--green-700);
-  position: relative;
-}
-
-.section-title::after {
-  content: '';
-  display: block;
-  width: 80px;
-  height: 3px;
-  background-color: var(--accent);
-  margin: var(--space-sm) auto 0;
-}
-
-.section-intro {
-  text-align: center;
-  max-width: 700px;
-  margin: 0 auto var(--space-xl);
-  font-size: 1.1rem;
-}
-
-/* BOTÕES ATUALIZADOS */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: var(--border-radius);
-  font-family: var(--font-body);
-  font-weight: 500;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: var(--transition);
-  text-align: center;
-  line-height: 1;
-}
-
-.btn-primary {
-  background-color: var(--accent);
-  color: var(--text-light);
-}
-
-.btn-primary:hover, .btn-primary:focus {
-  background-color: var(--accent-light);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow);
-}
-
-/* BOTÃO SECUNDÁRIO AGORA É VERDE E BRANCO COM HOVER MAIS CLARO */
-.btn-secondary {
-  background-color: var(--green-700); /* VERDE SEMPRE */
-  color: var(--text-light); /* BRANCO SEMPRE */
-  border: 2px solid var(--green-700); /* BORDA VERDE */
-}
-
-.btn-secondary:hover, .btn-secondary:focus {
-  background-color: var(--green-600); /* VERDE MAIS CLARO NO HOVER */
-  color: var(--text-light); /* MANTÉM BRANCO NO HOVER */
-  transform: translateY(-2px); /* MOVIMENTO */
-  box-shadow: var(--shadow);
-}
-
-.btn-large {
-  padding: 1rem 2rem;
-  font-size: 1.1rem;
-}
-
-/* HEADER TRANSPARENTE NO TOPO */
-.header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-  background-color: transparent;
-  backdrop-filter: blur(0px);
-  transition: var(--transition);
-  border-bottom: 1px solid transparent;
-}
-
-/* Header quando scrolado - fica branco */
-.header.scrolled {
-  background-color: var(--menu-bg-scrolled);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid var(--gray-medium);
-}
-
-.nav {
-  padding: var(--space-sm) 0;
-  transition: var(--transition);
-}
-
-.nav-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-/* LOGO COM DUAS VERSÕES - BRANCA E VERDE */
-.nav-logo {
-  position: relative;
-  display: inline-block;
-  height: 45px;
-}
-
-.logo-img {
-  height: 45px;
-  width: auto;
-  transition: var(--transition);
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-/* Logo branco - visível quando menu é transparente */
-.logo-white {
-  opacity: 1;
-  filter: brightness(0) invert(1);
-}
-
-/* Logo verde - escondido quando menu é transparente */
-.logo-green {
-  opacity: 0;
-  filter: none;
-}
-
-/* Quando menu fica branco (scrolled), inverte as opacidades */
-.header.scrolled .logo-white {
-  opacity: 0;
-}
-
-.header.scrolled .logo-green {
-  opacity: 1;
-}
-
-/* MENU TRANSPARENTE - ESTILOS DELICADOS */
-.nav-menu {
-  display: flex;
-  list-style: none;
-  gap: var(--space-md);
-}
-
-.nav-link {
-  font-weight: 500;
-  color: var(--menu-text-light);
-  transition: var(--transition);
-  position: relative;
-  padding: var(--space-xs) var(--space-sm);
-  border-radius: 20px;
-  font-size: 0.95rem;
-  letter-spacing: 0.5px;
-}
-
-/* Estilo do menu quando scrolado */
-.header.scrolled .nav-link {
-  color: var(--text-dark);
-}
-
-.nav-link:hover, .nav-link:focus {
-  color: var(--text-light);
-  background-color: var(--menu-bg-transparent);
-  transform: translateY(-1px);
-}
-
-.header.scrolled .nav-link:hover,
-.header.scrolled .nav-link:focus {
-  color: var(--green-700);
-  background-color: rgba(0, 104, 81, 0.1);
-}
-
-/* Linha sutil abaixo do link ativo */
-.nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 50%;
-  width: 0;
-  height: 1px;
-  background-color: var(--text-light);
-  transition: var(--transition);
-  transform: translateX(-50%);
-}
-
-.header.scrolled .nav-link::after {
-  background-color: var(--green-700);
-}
-
-.nav-link:hover::after, 
-.nav-link:focus::after {
-  width: 80%;
-}
-
-/* Menu hamburger - apenas para mobile */
-.nav-toggle {
-  display: none;
-  flex-direction: column;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: var(--space-xs);
-}
-
-.nav-toggle span {
-  width: 22px;
-  height: 2px;
-  background-color: var(--menu-text-light);
-  margin: 2px 0;
-  transition: var(--transition);
-  border-radius: 1px;
-}
-
-.header.scrolled .nav-toggle span {
-  background-color: var(--text-dark);
-}
-
-/* HERO SECTION COM BACKGROUND MAIS ESCURO */
-.hero {
-  position: relative;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: var(--text-light);
-  padding: var(--space-xxl) 0;
-  
-  /* Background com gradiente mais escuro */
-  background-image: 
-    linear-gradient(135deg, rgba(0, 104, 81, 0.85) 0%, rgba(0, 120, 94, 0.75) 100%),
-    url('assets/bg-casal.jpg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-blend-mode: overlay;
-}
-
-/* AUMENTANDO A OPACIDADE DO BACKGROUND (MAIS ESCURO) */
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
-  z-index: -1;
-}
-
-.hero-content {
-  max-width: 800px;
-  padding: 0 var(--space-md);
-  z-index: 1;
-}
-
-.hero-logo {
-  margin-bottom: var(--space-lg);
-  max-width: 200px;
-  height: auto;
-}
-
-.hero-title {
-  font-size: 4rem;
-  margin-bottom: var(--space-sm);
-  color: var(--text-light);
-}
-
-.hero-subtitle {
-  font-size: 1.5rem;
-  margin-bottom: var(--space-xl);
-  font-weight: 300;
-}
-
-.hero-buttons {
-  display: flex;
-  gap: var(--space-md);
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: var(--space-xl);
-}
-
-/* CONTADOR REGRESSIVO */
-.countdown-container {
-  margin: var(--space-xl) 0;
-}
-
-.countdown {
-  display: flex;
-  justify-content: center;
-  gap: var(--space-md);
-  flex-wrap: wrap;
-}
-
-.countdown-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border-radius: var(--border-radius);
-  padding: var(--space-md);
-  min-width: 100px;
-}
-
-.countdown-number {
-  font-size: 2.5rem;
-  font-weight: 700;
-  line-height: 1;
-  margin-bottom: var(--space-xs);
-}
-
-.countdown-label {
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-/* INDICADOR DE ROLAGEM */
-.scroll-indicator {
-  position: absolute;
-  bottom: var(--space-lg);
-  left: 50%;
-  transform: translateX(-50%);
-  animation: bounce 2s infinite;
-}
-
-.scroll-indicator span {
-  display: block;
-  width: 24px;
-  height: 24px;
-  border-bottom: 2px solid var(--text-light);
-  border-right: 2px solid var(--text-light);
-  transform: rotate(45deg);
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateX(-50%) translateY(0);
-  }
-  40% {
-    transform: translateX(-50%) translateY(-10px);
-  }
-  60% {
-    transform: translateX(-50%) translateY(-5px);
-  }
-}
-
-/* SEÇÃO NOSSA HISTÓRIA */
-.history-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--space-lg);
-}
-
-.history-item {
-  background-color: var(--text-light);
-  border-radius: var(--border-radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow);
-  transition: var(--transition);
-}
-
-.history-item:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-lg);
-}
-
-.history-media {
-  position: relative;
-  height: 250px;
-  overflow: hidden;
-}
-
-.history-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: var(--transition);
-}
-
-.history-item:hover .history-media img {
-  transform: scale(1.05);
-}
-
-.history-content {
-  padding: var(--space-lg);
-}
-
-.history-date {
-  display: inline-block;
-  font-size: 0.9rem;
-  color: var(--accent);
-  font-weight: 500;
-  margin-bottom: var(--space-sm);
-}
-
-.history-title {
-  font-size: 1.3rem;
-  margin-bottom: var(--space-sm);
-  color: var(--green-700);
-}
-
-/* SEÇÃO REGRAS E PEDIDOS - ATUALIZADA */
-.rules-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--space-lg);
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.rule-item {
-  background-color: var(--text-light);
-  padding: var(--space-lg);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow);
-  text-align: center;
-  transition: var(--transition);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-}
-
-.rule-item:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-lg);
-}
-
-.rule-icon {
-  width: 70px;
-  height: 70px;
-  margin: 0 auto var(--space-md);
-  background: linear-gradient(135deg, var(--green-700) 0%, var(--green-600) 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-light);
-  flex-shrink: 0;
-}
-
-.rule-icon svg {
-  width: 32px;
-  height: 32px;
-}
-
-.rule-item h3 {
-  margin-bottom: var(--space-md);
-  color: var(--green-700);
-  font-size: 1.3rem;
-  font-weight: 600;
-}
-
-.rule-item p {
-  color: var(--text-dark);
-  line-height: 1.6;
-  margin-bottom: 0;
-  text-align: center;
-}
-
-/* MELHORIAS PARA OS NOVOS ÍCONES SVG */
-.rule-icon svg {
-  width: 32px;
-  height: 32px;
-  transition: var(--transition);
-}
-
-.rule-item:hover .rule-icon svg {
-  transform: scale(1.1);
-}
-
-/* Garantir que os SVGs herdem a cor corretamente */
-.rule-icon {
-  color: var(--text-light);
-}
-
-/* SEÇÃO LOCAL E DETALHES */
-.location-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-xl);
-  align-items: start;
-}
-
-.location-info h3 {
-  color: var(--green-700);
-  margin-bottom: var(--space-sm);
-}
-
-.location-address {
-  font-size: 1.1rem;
-  margin-bottom: var(--space-lg);
-  line-height: 1.6;
-}
-
-.location-details {
-  margin-bottom: var(--space-lg);
-}
-
-.detail-item {
-  margin-bottom: var(--space-sm);
-}
-
-.location-instructions {
-  margin-bottom: var(--space-lg);
-  font-style: italic;
-}
-
-.location-map {
-  border-radius: var(--border-radius);
-  overflow: hidden;
-  box-shadow: var(--shadow);
-}
-
-/* SEÇÃO CONFIRMAÇÃO DE PRESENÇA ATUALIZADA */
-.confirmation-container {
-  max-width: 600px;
-  margin: 0 auto;
-  background: var(--text-light);
-  padding: var(--space-lg);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow);
-}
-
-.search-box {
-  position: relative;
-}
-
-.search-input-container {
-  position: relative;
-}
-
-.search-input {
-  padding-right: 50px;
-  transition: var(--transition);
-}
-
-.search-input:focus {
-  border-color: var(--green-700);
-  box-shadow: 0 0 0 3px rgba(0, 104, 81, 0.1);
-}
-
-.search-icon {
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-dark);
-  opacity: 0.6;
-  transition: var(--transition);
-}
-
-.search-input:focus + .search-icon {
-  color: var(--green-700);
-  opacity: 1;
-}
-
-.search-icon svg {
-  width: 20px;
-  height: 20px;
-}
-
-.search-results {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: var(--text-light);
-  border: 1px solid var(--gray-medium);
-  border-radius: var(--border-radius);
-  max-height: 300px;
-  overflow-y: auto;
-  z-index: 1000;
-  display: none;
-  box-shadow: var(--shadow-lg);
-  margin-top: 5px;
-  animation: fadeInUp 0.2s ease-out;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.resultado-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--space-md);
-  border-bottom: 1px solid var(--gray-light);
-  transition: var(--transition);
-  cursor: pointer;
-}
-
-.resultado-item:hover {
-  background-color: var(--gray-light);
-  transform: translateX(5px);
-}
-
-.resultado-item:last-child {
-  border-bottom: none;
-}
-
-.resultado-item.loading {
-  justify-content: center;
-  color: var(--text-dark);
-  opacity: 0.7;
-  font-style: italic;
-}
-
-.result-name {
-  font-weight: 500;
-  color: var(--text-dark);
-  flex: 1;
-}
-
-.btn-select {
-  background: var(--green-700);
-  color: var(--text-light);
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: var(--transition);
-  white-space: nowrap;
-  margin-left: var(--space-sm);
-}
-
-.btn-select:hover {
-  background: var(--green-600);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 104, 81, 0.3);
-}
-
-.no-results {
-  text-align: center;
-  color: var(--text-dark);
-  opacity: 0.7;
-  font-style: italic;
-  cursor: default;
-}
-
-.no-results:hover {
-  background-color: transparent;
-  transform: none;
-}
-
-/* SCROLLBAR PERSONALIZADA PARA A LISTA */
-.search-results::-webkit-scrollbar {
-  width: 6px;
-}
-
-.search-results::-webkit-scrollbar-track {
-  background: var(--gray-light);
-  border-radius: 3px;
-}
-
-.search-results::-webkit-scrollbar-thumb {
-  background: var(--green-700);
-  border-radius: 3px;
-}
-
-.search-results::-webkit-scrollbar-thumb:hover {
-  background: var(--green-600);
-}
-
-/* STATUS MESSAGE */
-.status-message {
-  padding: var(--space-md);
-  border-radius: var(--border-radius);
-  margin-bottom: var(--space-md);
-  text-align: center;
-  font-weight: 500;
-  display: none;
-}
-
-.status-message.loading {
-  background: rgba(0, 104, 81, 0.1);
-  color: var(--green-700);
-  border: 1px solid var(--green-700);
-}
-
-.status-message.success {
-  background: rgba(0, 150, 0, 0.1);
-  color: #006400;
-  border: 1px solid #006400;
-}
-
-.status-message.error {
-  background: rgba(255, 0, 0, 0.1);
-  color: #8B0000;
-  border: 1px solid #8B0000;
-}
-
-/* POPUP ESTILIZADO */
-.popup-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(5px);
-  z-index: 2000;
-  justify-content: center;
-  align-items: center;
-  padding: var(--space-md);
-}
-
-.popup-content {
-  background: var(--text-light);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-lg);
-  max-width: 500px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  animation: popupFadeIn 0.3s ease-out;
-}
-
-@keyframes popupFadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9) translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-.popup-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--space-lg);
-  border-bottom: 1px solid var(--gray-light);
-}
-
-.popup-header h3 {
-  margin: 0;
-  color: var(--green-700);
-}
-
-.popup-close {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 50%;
-  transition: var(--transition);
-  color: var(--text-dark);
-}
-
-.popup-close:hover {
-  background: var(--gray-light);
-  transform: rotate(90deg);
-}
-
-.popup-close svg {
-  width: 20px;
-  height: 20px;
-}
-
-.popup-body {
-  padding: var(--space-lg);
-}
-
-.selected-guest {
-  background: var(--gray-light);
-  padding: var(--space-md);
-  border-radius: var(--border-radius);
-  margin-bottom: var(--space-lg);
-  text-align: center;
-}
-
-.guest-name {
-  display: block;
-  font-size: 1.2rem;
-  color: var(--green-700);
-  margin-top: 0.5rem;
-  font-weight: 600;
-}
-
-.confirmation-form {
-  margin-top: var(--space-lg);
-}
-
-/* BOTÃO COM LOADING */
-.btn-loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.loading-spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid transparent;
-  border-top: 2px solid currentColor;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* MENSAGEM DE CONFIRMAÇÃO FINAL */
-.confirmation-message {
-  margin-top: var(--space-lg);
-  padding: var(--space-lg);
-  border-radius: var(--border-radius-lg);
-  text-align: center;
-  display: none;
-}
-
-.confirmation-message.success {
-  background: rgba(0, 150, 0, 0.1);
-  border: 1px solid #006400;
-}
-
-.confirmation-message.error {
-  background: rgba(255, 0, 0, 0.1);
-  border: 1px solid #8B0000;
-}
-
-.confirmation-success {
-  text-align: center;
-}
-
-.success-icon {
-  font-size: 3rem;
-  margin-bottom: var(--space-md);
-}
-
-.success-message {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--green-700);
-  margin-bottom: var(--space-sm);
-}
-
-.success-details {
-  color: var(--text-dark);
-  opacity: 0.8;
-}
-
-/* FORMULÁRIO RSVP ORIGINAL (PARA COMPATIBILIDADE) */
-.rsvp-form {
-  max-width: 600px;
-  margin: 0 auto;
-  background-color: var(--text-light);
-  padding: var(--space-xl);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow);
-}
-
-.form-group {
-  margin-bottom: var(--space-lg);
-}
-
-.form-label {
-  display: block;
-  margin-bottom: var(--space-xs);
-  font-weight: 500;
-  color: var(--green-700);
-}
-
-.form-input, .form-select, .form-textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid var(--gray-medium);
-  border-radius: var(--border-radius);
-  font-family: var(--font-body);
-  font-size: 1rem;
-  transition: var(--transition);
-}
-
-.form-input:focus, .form-select:focus, .form-textarea:focus {
-  outline: none;
-  border-color: var(--green-700);
-  box-shadow: 0 0 0 2px rgba(0, 104, 81, 0.2);
-}
-
-.form-options {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-}
-
-.form-option {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  padding: var(--space-sm);
-  border: 1px solid var(--gray-medium);
-  border-radius: var(--border-radius);
-  transition: var(--transition);
-}
-
-.form-option:hover {
-  border-color: var(--green-700);
-}
-
-.form-option input {
-  margin-right: var(--space-sm);
-}
-
-.form-option-text {
-  font-weight: 400;
-}
-
-.form-buttons {
-  display: flex;
-  gap: var(--space-md);
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.form-message {
-  margin-top: var(--space-lg);
-  padding: var(--space-md);
-  border-radius: var(--border-radius);
-  text-align: center;
-  display: none;
-}
-
-.form-message.success {
-  background-color: rgba(0, 150, 0, 0.1);
-  color: #006400;
-  border: 1px solid #006400;
-  display: block;
-}
-
-.form-message.error {
-  background-color: rgba(255, 0, 0, 0.1);
-  color: #8B0000;
-  border: 1px solid #8B0000;
-  display: block;
-}
-
-/* SEÇÃO PRESENTES */
-.gifts-content {
-  text-align: center;
-}
-
-/* RODAPÉ */
-.footer {
-  background-color: var(--green-700);
-  color: var(--text-light);
-  padding: var(--space-xl) 0;
-  position: relative;
-}
-
-.social-links {
-  display: flex;
-  justify-content: center;
-  gap: var(--space-md);
-  margin-bottom: var(--space-lg);
-}
-
-.social-link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  transition: var(--transition);
-}
-
-.social-link:hover, .social-link:focus {
-  background-color: var(--accent);
-  transform: translateY(-3px);
-}
-
-.social-link svg {
-  width: 20px;
-  height: 20px;
-}
-
-.footer-copyright {
-  text-align: center;
-  font-size: 0.9rem;
-  opacity: 0.8;
-}
-
-.back-to-top {
-  position: absolute;
-  right: var(--space-md);
-  bottom: var(--space-md);
-  width: 40px;
-  height: 40px;
-  background-color: var(--accent);
-  color: var(--text-light);
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: var(--transition);
-  opacity: 0;
-  visibility: hidden;
-}
-
-.back-to-top:hover, .back-to-top:focus {
-  background-color: var(--accent-light);
-  transform: translateY(-3px);
-}
-
-.back-to-top.visible {
-  opacity: 1;
-  visibility: visible;
-}
-
-.back-to-top svg {
-  width: 20px;
-  height: 20px;
-}
-
-/* ========================================= */
-/* RESPONSIVIDADE MELHORADA PARA SMARTPHONES */
-/* ========================================= */
-
-@media (max-width: 992px) {
-  .location-content {
-    grid-template-columns: 1fr;
-    gap: var(--space-lg);
-  }
-  
-  .location-map {
-    order: -1;
-  }
-}
-
-/* TABLETS */
-@media (max-width: 768px) {
-  :root {
-    --space-xxl: 3rem;
-  }
-  
-  h1 {
-    font-size: 2.5rem;
-  }
-  
-  h2 {
-    font-size: 2rem;
-  }
-  
-  .hero-title {
-    font-size: 3rem;
-  }
-  
-  .countdown-item {
-    min-width: 80px;
-    padding: var(--space-sm);
-  }
-  
-  .countdown-number {
-    font-size: 2rem;
-  }
-  
-  .hero-buttons {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .btn {
-    width: 100%;
-    max-width: 300px;
-  }
-  
-  .form-buttons {
-    flex-direction: column;
-  }
-  
-  /* RESPONSIVIDADE PARA REGRAS */
-  .rules-grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-md);
-    padding: 0 var(--space-sm);
-  }
-  
-  .rule-item {
-    padding: var(--space-md);
-  }
-  
-  .rule-icon {
-    width: 60px;
-    height: 60px;
-    margin-bottom: var(--space-sm);
-  }
-  
-  .rule-icon svg {
-    width: 28px;
-    height: 28px;
-  }
-  
-  .rule-item h3 {
-    font-size: 1.2rem;
-    margin-bottom: var(--space-sm);
-  }
-  
-  /* RESPONSIVIDADE PARA CONFIRMAÇÃO */
-  .confirmation-container {
-    padding: var(--space-md);
-    margin: 0 var(--space-sm);
-  }
-  
-  .popup-content {
-    margin: var(--space-sm);
-  }
-  
-  .popup-body {
-    padding: var(--space-md);
-  }
-  
-  .resultado-item {
-    flex-direction: column;
-    gap: var(--space-sm);
-    text-align: center;
-  }
-  
-  .btn-select {
-    margin-left: 0;
-    width: 100%;
-    text-align: center;
-  }
-  
-  .search-results {
-    margin-top: 2px;
-  }
-}
-
-/* SMARTPHONES - LAYOUT MELHORADO */
-@media (max-width: 576px) {
-  .container {
-    padding: 0 var(--space-sm);
-  }
-  
-  .section {
-    padding: var(--space-xl) 0;
-  }
-  
-  .hero {
-    padding-top: 100px; /* Espaço para o header fixo */
-    min-height: 100vh;
-  }
-  
-  .hero-title {
-    font-size: 2.5rem;
-    line-height: 1.1;
-  }
-  
-  .hero-subtitle {
-    font-size: 1.2rem;
-  }
-  
-  .countdown {
-    gap: var(--space-sm);
-  }
-  
-  .countdown-item {
-    min-width: 70px;
-    padding: var(--space-xs);
-  }
-  
-  .countdown-number {
-    font-size: 1.5rem;
-  }
-  
-  .countdown-label {
-    font-size: 0.8rem;
-  }
-  
-  .rsvp-form {
-    padding: var(--space-lg);
-  }
-  
-  /* HEADER MELHORADO PARA MOBILE */
-  .header {
-    padding: 0 var(--space-sm);
-  }
-  
-  .nav-container {
-    padding: var(--space-xs) 0;
-  }
-  
-  .nav-logo {
-    height: 40px;
-    position: relative;
-    z-index: 1001;
-  }
-  
-  .logo-img {
-    height: 40px;
-  }
-  
-  /* MENU HAMBURGUER PARA MOBILE */
-  .nav-toggle {
-    display: flex;
-    z-index: 1001;
-  }
-  
-  .nav-menu {
-    position: fixed;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100vh;
-    background-color: var(--menu-bg-scrolled);
-    backdrop-filter: blur(20px);
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    transition: var(--transition);
-    z-index: 1000;
-    padding: var(--space-xl);
-  }
-  
-  .nav-menu.active {
-    left: 0;
-  }
-  
-  .nav-link {
-    color: var(--text-dark);
-    font-size: 1.2rem;
-    padding: var(--space-md);
-    width: 100%;
-    text-align: center;
-    border-bottom: 1px solid var(--gray-medium);
-  }
-  
-  .nav-link:last-child {
-    border-bottom: none;
-  }
-  
-  .nav-link::after {
-    display: none;
-  }
-  
-  .nav-link:hover, 
-  .nav-link:focus {
-    color: var(--green-700);
-    background-color: rgba(0, 104, 81, 0.1);
-  }
-  
-  /* SEÇÕES MELHORADAS PARA MOBILE */
-  .history-grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-md);
-  }
-  
-  .rules-grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-md);
-  }
-  
-  .rule-item {
-    padding: var(--space-md);
-  }
-  
-  .section-title {
-    font-size: 1.8rem;
-  }
-  
-  .section-intro {
-    font-size: 1rem;
-  }
-  
-  /* FORMULÁRIO MELHORADO PARA MOBILE */
-  .form-group {
-    margin-bottom: var(--space-md);
-  }
-  
-  .form-input, .form-select, .form-textarea {
-    padding: 0.9rem;
-    font-size: 16px; /* Previne zoom no iOS */
-  }
-  
-  /* FOOTER MELHORADO PARA MOBILE */
-  .footer {
-    padding: var(--space-lg) 0;
-  }
-  
-  .social-links {
-    gap: var(--space-sm);
-  }
-  
-  .back-to-top {
-    right: var(--space-sm);
-    bottom: var(--space-sm);
-  }
-}
-
-/* SMARTPHONES MUITO PEQUENOS */
-@media (max-width: 375px) {
-  .hero-title {
-    font-size: 2rem;
-  }
-  
-  .hero-subtitle {
-    font-size: 1.1rem;
-  }
-  
-  .countdown-item {
-    min-width: 60px;
-  }
-  
-  .countdown-number {
-    font-size: 1.3rem;
-  }
-  
-  .btn {
-    padding: 0.9rem 1.2rem;
-    font-size: 0.9rem;
-  }
-  
-  .rule-item {
-    padding: var(--space-md) var(--space-sm);
-  }
-  
-  .rules-grid {
-    gap: var(--space-sm);
-  }
-}
-
-/* ESTILOS PARA IMPRESSÃO */
-@media print {
-  .header, .footer, .hero-buttons, .scroll-indicator, .back-to-top {
-    display: none !important;
-  }
-  
-  .hero {
-    background: none !important;
-    color: var(--text-dark) !important;
-    min-height: auto;
-    padding: var(--space-lg) 0;
-  }
-  
-  .section {
-    padding: var(--space-lg) 0;
-    break-inside: avoid;
-  }
-  
-  a {
-    text-decoration: underline;
-  }
-  
-  .btn {
-    border: 1px solid var(--text-dark);
-    background: none !important;
-    color: var(--text-dark) !important;
-  }
-}
-
-/* Responsividade para os novos ícones */
-@media (max-width: 768px) {
-  .rule-icon svg {
-    width: 28px;
-    height: 28px;
-  }
-}
-
-@media (max-width: 576px) {
-  .rule-icon svg {
-    width: 24px;
-    height: 24px;
-  }
-}
-
-/* CORREÇÕES PARA HEADER SCROLL - GARANTIR FUNCIONAMENTO */
-.header.scrolled {
-  background-color: var(--menu-bg-scrolled) !important;
-  backdrop-filter: blur(10px) !important;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1) !important;
-  border-bottom: 1px solid var(--gray-medium) !important;
-}
-
-/* GARANTIR QUE AS LOGOS MUDEM CORRETAMENTE */
-.header:not(.scrolled) .logo-white {
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-.header:not(.scrolled) .logo-green {
-  opacity: 0 !important;
-  visibility: hidden !important;
-}
-
-.header.scrolled .logo-white {
-  opacity: 0 !important;
-  visibility: hidden !important;
-}
-
-.header.scrolled .logo-green {
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-/* TRANSITION MAIS SUAVE PARA AS LOGOS */
-.logo-img {
-  transition: opacity 0.4s ease, visibility 0.4s ease !important;
-}
-
-/* GARANTIR QUE O HEADER TENHA TRANSITION */
-.header {
-  transition: all 0.4s ease !important;
-}
-
-/* CORREÇÃO PARA O MENU SCROLLED */
-.header.scrolled .nav-link {
-  color: var(--text-dark) !important;
-}
-
-.header.scrolled .nav-link:hover,
-.header.scrolled .nav-link:focus {
-  color: var(--green-700) !important;
-  background-color: rgba(0, 104, 81, 0.1) !important;
-}
-
-.header.scrolled .nav-toggle span {
-  background-color: var(--text-dark) !important;
-}
+// SCRIPTS.JS - Funcionalidades do site do casamento
+// INSTRUÇÃO: Para alterar datas, endpoints ou conteúdo, edite as constantes abaixo
+
+// CONFIGURAÇÕES PRINCIPAIS - EDITAR AQUI
+// =========================================
+
+// DATA DO CASAMENTO - INSTRUÇÃO: Altere para a data do seu evento
+const EVENT_DATE = new Date('2026-11-28T17:00:00'); // Formato: AAAA-MM-DDTHH:MM:SS
+
+// ENDPOINT DO FORMULÁRIO RSVP - INSTRUÇÃO: Substitua pela URL do seu endpoint
+const RSVP_ENDPOINT = 'https://exemplo.com/api/rsvp'; // URL do backend para receber os RSVPs
+
+// CONTEÚDO DA SEÇÃO "NOSSA HISTÓRIA" - INSTRUÇÃO: Adicione/remova itens conforme necessário
+const historyItems = [
+  {
+    date: 'Junho 2018',
+    title: 'Nosso Primeiro Encontro',
+    description: 'Nos conhecemos durante uma conferência de trabalho em São Paulo. Foi amor à primeira vista!',
+    media: {
+      type: 'image', // 'image' ou 'video'
+      src: 'assets/historia-1.jpg', // Caminho da imagem
+      alt: 'Maria e João em seu primeiro encontro' // Texto alternativo para acessibilidade
+    }
+  },
+  {
+    date: 'Dezembro 2020',
+    title: 'Primeira Viagem Juntos',
+    description: 'Passamos o Réveillon em uma praia paradisíaca. Foi quando soubemos que queríamos passar nossas vidas juntos.',
+    media: {
+      type: 'image',
+      src: 'assets/historia-2.jpg',
+      alt: 'Maria e João na praia durante o Réveillon'
+    }
+  },
+  {
+    date: 'Março 2023',
+    title: 'O Pedido',
+    description: 'João pediu Maria em casamento durante um pôr do sol inesquecível na Praia do Rosa.',
+    media: {
+      type: 'video',
+      src: 'https://www.youtube.com/embed/VIDEO_ID', // ID do vídeo do YouTube
+      alt: 'Vídeo do pedido de casamento'
+    }
+  },
+  {
+    date: 'Novembro 2026',
+    title: 'Nosso Grande Dia',
+    description: 'Estamos ansiosos para compartilhar este momento especial com todos que amamos!',
+    media: {
+      type: 'image',
+      src: 'assets/historia-3.jpg',
+      alt: 'Maria e João no dia do casamento'
+    }
+  }
+];
+
+// =========================================
+// FIM DAS CONFIGURAÇÕES EDITÁVEIS
+
+// INICIALIZAÇÃO DO SITE
+document.addEventListener('DOMContentLoaded', function() {
+  // Inicializar todas as funcionalidades
+  initNavigation();
+  initCountdown();
+  initHistorySection();
+  initRSVPForm();
+  initBackToTop();
+  initSmoothScroll();
+  initHeaderScroll();
+  
+  console.log('Site do casamento carregado com sucesso!');
+});
+
+// FUNÇÃO: CONTROLE DO MENU TRANSPARENTE AO SCROLLAR
+function initHeaderScroll() {
+  const header = document.querySelector('.header');
+  const scrollThreshold = 100;
+
+  function updateHeader() {
+    if (window.pageYOffset > scrollThreshold) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  }
+
+  window.addEventListener('scroll', updateHeader);
+  updateHeader();
+}
+
+// FUNÇÃO: NAVEGAÇÃO RESPONSIVA MELHORADA
+function initNavigation() {
+  const navToggle = document.querySelector('.nav-toggle');
+  const navMenu = document.querySelector('.nav-menu');
+  const header = document.querySelector('.header');
+  const body = document.body;
+  
+  if (navToggle && navMenu) {
+    navToggle.addEventListener('click', function() {
+      navMenu.classList.toggle('active');
+      navToggle.classList.toggle('active');
+      body.classList.toggle('no-scroll'); // Impede scroll quando menu está aberto
+      navToggle.setAttribute('aria-expanded', navToggle.classList.contains('active'));
+    });
+    
+    // Fechar menu ao clicar em um link (mobile)
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 576) { // Apenas no mobile
+          navMenu.classList.remove('active');
+          navToggle.classList.remove('active');
+          body.classList.remove('no-scroll');
+          navToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+    
+    // Fechar menu ao clicar fora (mobile)
+    document.addEventListener('click', function(event) {
+      if (window.innerWidth <= 576 && 
+          navMenu.classList.contains('active') &&
+          !navMenu.contains(event.target) && 
+          !navToggle.contains(event.target)) {
+        navMenu.classList.remove('active');
+        navToggle.classList.remove('active');
+        body.classList.remove('no-scroll');
+        navToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+}
+
+// FUNÇÃO: CONTADOR REGRESSIVO
+function initCountdown() {
+  const daysElement = document.getElementById('days');
+  const hoursElement = document.getElementById('hours');
+  const minutesElement = document.getElementById('minutes');
+  const secondsElement = document.getElementById('seconds');
+  
+  // Verificar se o contador existe na página
+  if (!daysElement) return;
+  
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const distance = EVENT_DATE.getTime() - now;
+    
+    // Se a data já passou
+    if (distance < 0) {
+      document.querySelector('.countdown-container').innerHTML = 
+        '<div class="countdown-finished"><h3>Hoje é o nosso dia!</h3></div>';
+      return;
+    }
+    
+    // Calcular dias, horas, minutos e segundos
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+    // Atualizar elementos HTML
+    daysElement.textContent = String(days).padStart(2, '0');
+    hoursElement.textContent = String(hours).padStart(2, '0');
+    minutesElement.textContent = String(minutes).padStart(2, '0');
+    secondsElement.textContent = String(seconds).padStart(2, '0');
+  }
+  
+  // Atualizar imediatamente e a cada segundo
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+}
+
+// FUNÇÃO: CARREGAR SEÇÃO "NOSSA HISTÓRIA"
+function initHistorySection() {
+  const historyContainer = document.getElementById('history-container');
+  
+  if (!historyContainer || !historyItems.length) return;
+  
+  // Gerar HTML para cada item da história
+  const historyHTML = historyItems.map(item => `
+    <div class="history-item">
+      <div class="history-media">
+        ${item.media.type === 'image' 
+          ? `<img src="${item.media.src}" alt="${item.media.alt}" loading="lazy">`
+          : `<iframe src="${item.media.src}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="${item.media.alt}"></iframe>`
+        }
+      </div>
+      <div class="history-content">
+        <span class="history-date">${item.date}</span>
+        <h3 class="history-title">${item.title}</h3>
+        <p>${item.description}</p>
+      </div>
+    </div>
+  `).join('');
+  
+  // Inserir HTML no container
+  historyContainer.innerHTML = historyHTML;
+}
+
+// CONFIRMAÇÃO DE PRESENÇA - VERSÃO CORRIGIDA
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyusVzyL-clDFq8lbmrcFPbK1qothRfN9LASK2H8zjd1zmTPsq7vs1QAWNS5xsDuPpt/exec';
+
+class ConfirmacaoPresenca {
+  constructor() {
+    this.listaDeNomes = [];
+    this.listaCarregada = false;
+    this.timeoutBusca = null;
+    
+    this.inicializar();
+  }
+  
+  inicializar() {
+    console.log('🎯 Inicializando sistema de confirmação...');
+    this.carregarElementos();
+    this.configurarEventos();
+    this.carregarListaDeNomes();
+  }
+  
+  carregarElementos() {
+    this.buscarNomeInput = document.getElementById('buscarNome');
+    this.resultadosBuscaDiv = document.getElementById('resultadosBusca');
+    this.popup = document.getElementById('popupConfirmacao');
+    this.nomeSelecionadoSpan = document.getElementById('nomeSelecionado');
+    this.formConfirmacaoFinal = document.getElementById('formConfirmacaoFinal');
+    this.btnCancelar = document.getElementById('btnCancelar');
+    this.popupClose = document.getElementById('popupClose');
+    this.mensagemRetornoDiv = document.getElementById('mensagemRetorno');
+  }
+  
+  configurarEventos() {
+    // Busca em tempo real
+    this.buscarNomeInput.addEventListener('input', (e) => {
+      this.handleBuscaInput(e.target.value);
+    });
+    
+    // Fechar resultados ao clicar fora
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.search-box')) {
+        this.esconderResultados();
+      }
+    });
+    
+    // Popup events
+    this.btnCancelar.addEventListener('click', () => this.fecharPopup());
+    this.popupClose.addEventListener('click', () => this.fecharPopup());
+    
+    this.popup.addEventListener('click', (e) => {
+      if (e.target === this.popup) {
+        this.fecharPopup();
+      }
+    });
+    
+    // Form submission
+    this.formConfirmacaoFinal.addEventListener('submit', (e) => {
+      e.preventDefault();
+      this.processarConfirmacao();
+    });
+  }
+  
+  async carregarListaDeNomes() {
+    console.log('📥 Carregando lista de convidados...');
+    
+    try {
+      // Usando text/plain para evitar problemas de CORS
+      const response = await fetch(SCRIPT_URL, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'text/plain'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+      
+      const text = await response.text();
+      const result = JSON.parse(text);
+      
+      if (result.success) {
+        this.listaDeNomes = result.data;
+        this.listaCarregada = true;
+        console.log(`✅ ${this.listaDeNomes.length} convidados carregados com sucesso`);
+      } else {
+        throw new Error(result.error || 'Erro desconhecido');
+      }
+      
+    } catch (error) {
+      console.error('❌ Erro ao carregar lista:', error);
+      this.exibirMensagem('Erro ao carregar lista de convidados. Tente recarregar a página.', 'error');
+      
+      // Tentar novamente após 5 segundos
+      setTimeout(() => this.carregarListaDeNomes(), 5000);
+    }
+  }
+  
+  handleBuscaInput(termo) {
+    clearTimeout(this.timeoutBusca);
+    
+    const termoLimpo = termo.trim();
+    
+    if (termoLimpo.length < 2) {
+      this.esconderResultados();
+      return;
+    }
+    
+    if (!this.listaCarregada) {
+      this.mostrarResultados([], '⌛ Carregando lista de convidados...');
+      return;
+    }
+    
+    this.timeoutBusca = setTimeout(() => {
+      this.executarBusca(termoLimpo);
+    }, 300);
+  }
+  
+  executarBusca(termo) {
+    const termoLower = termo.toLowerCase();
+    const resultados = this.listaDeNomes.filter(nome => 
+      nome.toLowerCase().includes(termoLower)
+    );
+    
+    console.log(`🔍 Busca por "${termo}": ${resultados.length} resultados`);
+    
+    if (resultados.length === 0) {
+      this.mostrarResultados([], `Nenhum convidado encontrado com "${termo}"`);
+    } else {
+      this.mostrarResultados(resultados);
+    }
+  }
+  
+  mostrarResultados(resultados, mensagemVazia = null) {
+    this.resultadosBuscaDiv.innerHTML = '';
+    
+    if (mensagemVazia) {
+      this.resultadosBuscaDiv.innerHTML = `
+        <div class="resultado-item no-results">${mensagemVazia}</div>
+      `;
+    } else {
+      resultados.forEach(nome => {
+        const div = document.createElement('div');
+        div.className = 'resultado-item';
+        div.innerHTML = `
+          <span class="result-name">${nome}</span>
+          <button class="btn-select" data-nome="${nome}">Sou eu</button>
+        `;
+        
+        div.querySelector('.btn-select').addEventListener('click', () => {
+          this.abrirPopupConfirmacao(nome);
+        });
+        
+        this.resultadosBuscaDiv.appendChild(div);
+      });
+    }
+    
+    this.resultadosBuscaDiv.style.display = 'block';
+  }
+  
+  esconderResultados() {
+    this.resultadosBuscaDiv.style.display = 'none';
+  }
+  
+  abrirPopupConfirmacao(nome) {
+    console.log(`👤 Abrindo popup para: ${nome}`);
+    
+    this.nomeSelecionadoSpan.textContent = nome;
+    this.popup.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    
+    // Pré-preencher o campo de nome
+    document.getElementById('nomeConfirmacao').value = nome;
+    document.getElementById('nomeConfirmacao').focus();
+    
+    this.esconderResultados();
+    this.buscarNomeInput.value = '';
+  }
+  
+  fecharPopup() {
+    this.popup.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    this.limparFormulario();
+  }
+  
+  async processarConfirmacao() {
+    const nomeBuscado = this.nomeSelecionadoSpan.textContent;
+    const nomeConfirmacao = document.getElementById('nomeConfirmacao').value.trim();
+    const documento = document.getElementById('documento').value.trim();
+    const email = document.getElementById('emailConfirmacao').value.trim();
+    
+    console.log('📤 Enviando confirmação:', { nomeBuscado, nomeConfirmacao, documento, email });
+    
+    // Validações
+    if (!this.validarConfirmacao(nomeBuscado, nomeConfirmacao, documento, email)) {
+      return;
+    }
+    
+    this.mostrarLoading(true);
+    
+    try {
+      const resultado = await this.enviarConfirmacao({
+        nomeBuscado,
+        nomeConfirmacao,
+        documento,
+        email
+      });
+      
+      this.processarRespostaConfirmacao(resultado, nomeBuscado);
+      
+    } catch (error) {
+      console.error('❌ Erro na confirmação:', error);
+      this.exibirMensagem('❌ Erro de conexão. Tente novamente.', 'error');
+    } finally {
+      this.mostrarLoading(false);
+    }
+  }
+  
+  validarConfirmacao(nomeBuscado, nomeConfirmacao, documento, email) {
+    if (nomeConfirmacao.toLowerCase() !== nomeBuscado.toLowerCase()) {
+      this.exibirMensagem('O nome digitado não confere com o nome selecionado.', 'error');
+      return false;
+    }
+    
+    if (!this.validarDocumento(documento)) {
+      this.exibirMensagem('Por favor, digite um RG ou CPF válido (mínimo 8 dígitos).', 'error');
+      return false;
+    }
+    
+    if (!this.validarEmail(email)) {
+      this.exibirMensagem('Por favor, digite um e-mail válido.', 'error');
+      return false;
+    }
+    
+    return true;
+  }
+  
+  async enviarConfirmacao(dados) {
+    // Usando text/plain para evitar problemas de CORS
+    const response = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8',
+      },
+      body: JSON.stringify(dados)
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Erro HTTP: ${response.status}`);
+    }
+    
+    const text = await response.text();
+    return JSON.parse(text);
+  }
+  
+  processarRespostaConfirmacao(resultado, nomeBuscado) {
+    if (resultado.success) {
+      this.exibirMensagemConfirmacao('✅ Presença confirmada com sucesso! Obrigado por confirmar.');
+      this.fecharPopup();
+      
+      // Remover nome da lista local
+      this.listaDeNomes = this.listaDeNomes.filter(nome => nome !== nomeBuscado);
+      
+    } else {
+      let mensagemErro = '❌ Erro na confirmação. Tente novamente.';
+      
+      if (resultado.error === 'JA_CONFIRMADO') {
+        mensagemErro = '❌ Este convidado já foi confirmado anteriormente.';
+      } else if (resultado.error === 'NAO_ENCONTRADO') {
+        mensagemErro = '❌ Nome não encontrado na lista de convidados.';
+      }
+      
+      this.exibirMensagem(mensagemErro, 'error');
+    }
+  }
+  
+  mostrarLoading(mostrar) {
+    const btnSubmit = this.formConfirmacaoFinal.querySelector('.btn-primary');
+    const btnText = btnSubmit.querySelector('.btn-text');
+    const btnLoading = btnSubmit.querySelector('.btn-loading');
+    
+    if (mostrar) {
+      btnText.style.display = 'none';
+      btnLoading.style.display = 'flex';
+      btnSubmit.disabled = true;
+    } else {
+      btnText.style.display = 'block';
+      btnLoading.style.display = 'none';
+      btnSubmit.disabled = false;
+    }
+  }
+  
+  exibirMensagem(mensagem, tipo) {
+    this.mensagemRetornoDiv.innerHTML = mensagem;
+    this.mensagemRetornoDiv.className = `confirmation-message ${tipo}`;
+    this.mensagemRetornoDiv.style.display = 'block';
+    
+    setTimeout(() => {
+      this.mensagemRetornoDiv.style.display = 'none';
+    }, 5000);
+  }
+  
+  exibirMensagemConfirmacao(mensagem) {
+    this.mensagemRetornoDiv.innerHTML = `
+      <div class="confirmation-success">
+        <div class="success-icon">🎉</div>
+        <div class="success-message">${mensagem}</div>
+        <div class="success-details">Enviaremos todas as informações para o e-mail cadastrado.</div>
+      </div>
+    `;
+    this.mensagemRetornoDiv.className = 'confirmation-message success';
+    this.mensagemRetornoDiv.style.display = 'block';
+  }
+  
+  limparFormulario() {
+    this.formConfirmacaoFinal.reset();
+    this.esconderResultados();
+  }
+  
+  validarDocumento(documento) {
+    const docLimpo = documento.replace(/\D/g, '');
+    return docLimpo.length >= 8;
+  }
+  
+  validarEmail(email) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  }
+}
+
+// Inicializar o sistema quando o DOM estiver carregado
+document.addEventListener('DOMContentLoaded', function() {
+  new ConfirmacaoPresenca();
+});
+
+// FUNÇÃO: BOTÃO "VOLTAR AO TOPO"
+function initBackToTop() {
+  const backToTopBtn = document.querySelector('.back-to-top');
+  
+  if (!backToTopBtn) return;
+  
+  // Mostrar/ocultar botão baseado na rolagem
+  window.addEventListener('scroll', function() {
+    if (window.pageYOffset > 300) {
+      backToTopBtn.style.opacity = '1';
+      backToTopBtn.style.visibility = 'visible';
+    } else {
+      backToTopBtn.style.opacity = '0';
+      backToTopBtn.style.visibility = 'hidden';
+    }
+  });
+  
+  // Rolagem suave ao topo
+  backToTopBtn.addEventListener('click', function() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+}
+
+// FUNÇÃO: ROLAGEM SUAVE PARA ÂNCORAS
+function initSmoothScroll() {
+  // Selecionar todos os links que começam com #
+  const anchorLinks = document.querySelectorAll('a[href^="#"]');
+  
+  anchorLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      
+      // Pular se for apenas "#" ou link vazio
+      if (href === '#' || href === '') return;
+      
+      const target = document.querySelector(href);
+      
+      if (target) {
+        e.preventDefault();
+        
+        // Calcular posição considerando o header fixo
+        const headerHeight = document.querySelector('.header').offsetHeight;
+        const targetPosition = target.offsetTop - headerHeight;
+        
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
+      }
+    });
+  });
+}
+
+// FUNÇÃO: CARREGAMENTO OTIMIZADO DE IMAGENS
+function loadCriticalImages() {
+  // INSTRUÇÃO: Adicione aqui as imagens que devem ser carregadas prioritariamente
+  const criticalImages = [
+    'assets/logo-branco.png',
+    'assets/logo-verde.png',
+    'assets/bg-casal.jpg'
+  ];
+  
+  criticalImages.forEach(src => {
+    const img = new Image();
+    img.src = src;
+  });
+}
+
+// INICIALIZAR CARREGAMENTO DE IMAGENS CRÍTICAS
+loadCriticalImages();
+
+// FUNÇÃO: PREVENIR SCROLL QUANDO MENU ESTÁ ABERTO (MOBILE)
+document.addEventListener('DOMContentLoaded', function() {
+  const style = document.createElement('style');
+  style.textContent = `
+    body.no-scroll {
+      overflow: hidden;
+    }
+  `;
+  document.head.appendChild(style);
+});
