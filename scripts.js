@@ -71,51 +71,42 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log('Site do casamento carregado com sucesso!');
 });
 
-// FUNÇÃO: CONTROLE DO MENU TRANSPARENTE AO SCROLLAR - VERSÃO CORRIGIDA
+// FUNÇÃO: CONTROLE DO MENU TRANSPARENTE AO SCROLLAR - VERSÃO DEFINITIVA
 function initHeaderScroll() {
   const header = document.querySelector('.header');
-  const logoWhite = document.querySelector('.logo-white');
-  const logoGreen = document.querySelector('.logo-green');
-  const scrollThreshold = 50; // Reduzido para melhor resposta
-
-  // Verificar se os elementos existem
-  if (!header || !logoWhite || !logoGreen) {
-    console.warn('Elementos do header não encontrados');
+  if (!header) {
+    console.error('Header element not found!');
     return;
   }
 
-  function updateHeader() {
-    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+  function handleScroll() {
+    const scrollPosition = window.scrollY || document.documentElement.scrollTop;
     
-    if (scrollY > scrollThreshold) {
+    if (scrollPosition > 50) {
       header.classList.add('scrolled');
-      // Forçar display para garantir a transição
-      logoWhite.style.opacity = '0';
-      logoGreen.style.opacity = '1';
+      console.log('🔄 Header: SCROLLED (branco + logo verde)');
     } else {
       header.classList.remove('scrolled');
-      // Forçar display para garantir a transição
-      logoWhite.style.opacity = '1';
-      logoGreen.style.opacity = '0';
+      console.log('🔄 Header: TRANSPARENTE (logo branco)');
     }
   }
 
-  // Otimização: throttling para melhor performance
+  // Otimizado com throttle
   let ticking = false;
-  function throttledUpdate() {
+  function throttledScroll() {
     if (!ticking) {
       requestAnimationFrame(() => {
-        updateHeader();
+        handleScroll();
         ticking = false;
       });
       ticking = true;
     }
   }
 
-  window.addEventListener('scroll', throttledUpdate, { passive: true });
+  window.addEventListener('scroll', throttledScroll, { passive: true });
   
-  // Executar uma vez para definir estado inicial
-  updateHeader();
+  // Chamar uma vez para definir estado inicial
+  handleScroll();
 }
 
 // FUNÇÃO: NAVEGAÇÃO RESPONSIVA MELHORADA
