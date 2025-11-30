@@ -71,20 +71,50 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log('Site do casamento carregado com sucesso!');
 });
 
-// FUNÇÃO: CONTROLE DO MENU TRANSPARENTE AO SCROLLAR
+// FUNÇÃO: CONTROLE DO MENU TRANSPARENTE AO SCROLLAR - VERSÃO CORRIGIDA
 function initHeaderScroll() {
   const header = document.querySelector('.header');
-  const scrollThreshold = 100;
+  const logoWhite = document.querySelector('.logo-white');
+  const logoGreen = document.querySelector('.logo-green');
+  const scrollThreshold = 50; // Reduzido para melhor resposta
+
+  // Verificar se os elementos existem
+  if (!header || !logoWhite || !logoGreen) {
+    console.warn('Elementos do header não encontrados');
+    return;
+  }
 
   function updateHeader() {
-    if (window.pageYOffset > scrollThreshold) {
+    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+    
+    if (scrollY > scrollThreshold) {
       header.classList.add('scrolled');
+      // Forçar display para garantir a transição
+      logoWhite.style.opacity = '0';
+      logoGreen.style.opacity = '1';
     } else {
       header.classList.remove('scrolled');
+      // Forçar display para garantir a transição
+      logoWhite.style.opacity = '1';
+      logoGreen.style.opacity = '0';
     }
   }
 
-  window.addEventListener('scroll', updateHeader);
+  // Otimização: throttling para melhor performance
+  let ticking = false;
+  function throttledUpdate() {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        updateHeader();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }
+
+  window.addEventListener('scroll', throttledUpdate, { passive: true });
+  
+  // Executar uma vez para definir estado inicial
   updateHeader();
 }
 
