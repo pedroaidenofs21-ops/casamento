@@ -7,9 +7,6 @@
 // DATA DO CASAMENTO - INSTRUÇÃO: Altere para a data do seu evento
 const EVENT_DATE = new Date('2026-11-21T17:00:00'); // Formato: AAAA-MM-DDTHH:MM:SS
 
-// ENDPOINT DO FORMULÁRIO RSVP - INSTRUÇÃO: Substitua pela URL do seu endpoint
-const RSVP_ENDPOINT = 'https://exemplo.com/api/rsvp'; // URL do backend para receber os RSVPs
-
 // CONTEÚDO DA SEÇÃO "NOSSA HISTÓRIA" - INSTRUÇÃO: Adicione/remova itens conforme necessário
 const historyItems = [
   {
@@ -65,7 +62,6 @@ document.addEventListener('DOMContentLoaded', function() {
   initMobileMenuClose(); // NOVA FUNÇÃO
   initCountdown();
   initHistorySection();
-  initRSVPForm();
   initBackToTop();
   initSmoothScroll();
   
@@ -252,7 +248,7 @@ function initHistorySection() {
 }
 
 // CONFIRMAÇÃO DE PRESENÇA - VERSÃO CORRIGIDA
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzS2S98GwugyMXkpvqOmPQwDoFK1zW3zzHO7FbKrILwVP_xKirAdB2Lun6QSWR-Eu7s/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxoltRE3_c8LO9sFgGQpgZ8zWGSDu3q9A7zX3m9JRdVpsA3DVqVySkcOj9K7V6xI-NN/exec';
 
 class ConfirmacaoPresenca {
   constructor() {
