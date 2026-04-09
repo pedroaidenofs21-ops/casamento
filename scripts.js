@@ -327,6 +327,7 @@ class ConfirmacaoPresenca {
       const result = JSON.parse(text);
       
       if (result.success) {
+        const nomesUnicos = [...new Set(result.data.map(nome => nome.trim()))];
         this.listaDeNomes = result.data;
         this.listaCarregada = true;
         console.log(`✅ ${this.listaDeNomes.length} convidados carregados com sucesso`);
