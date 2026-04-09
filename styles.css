@@ -403,6 +403,7 @@ a {
 }
 
 .hero-content {
+  margin-top: 4rem;
   max-width: 800px;
   padding: 0 var(--space-md);
   z-index: 1;
