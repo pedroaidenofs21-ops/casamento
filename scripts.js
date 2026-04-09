@@ -327,10 +327,10 @@ class ConfirmacaoPresenca {
       const result = JSON.parse(text);
       
       if (result.success) {
-        const nomesUnicos = [...new Set(result.data.map(nome => nome.trim()))];
-        this.listaDeNomes = result.data;
+        const nomesLimpos = result.data.map(nome => String(nome).trim().replace(/\s+/g, ' '))
+        this.listaDeNomes = [...new Set(nomesLimpos)];
         this.listaCarregada = true;
-        console.log(`✅ ${this.listaDeNomes.length} convidados carregados com sucesso`);
+        console.log(`✅ ${this.listaDeNomes.length} convidados únicos carregados (${result.data.length} recebidos, ${result.data.length - this.listaDeNomes.length} duplicados removidos)`);
       } else {
         throw new Error(result.error || 'Erro desconhecido');
       }
